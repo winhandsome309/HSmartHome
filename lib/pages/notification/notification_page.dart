@@ -21,7 +21,7 @@ class _NotificationPageState extends State<NotificationPage> {
       backgroundColor: Colors.grey[300],
       body: const Center(
           child: Text(
-        'Notification',
+        'Thanh',
       )),
     );
   }
