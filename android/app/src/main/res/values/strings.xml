@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HSmartHome</string>
+    <string name="facebook_app_id">638690584685336</string>
+    <string name="fb_login_protocol_scheme">fb638690584685336</string>
+    <string name="facebook_client_token">29f96ae6eb8a4b62f3d317782fff028b</string>
+</resources>
