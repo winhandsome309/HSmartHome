@@ -52,6 +52,19 @@ dependencies:
   # State Management
   provider: ^6.0.5
 
+  # Adafruit
+  mqtt_client: ^9.7.4
+  logging: ^1.1.1
+  stack_trace: ^1.11.0
+  http: ^0.13.5
+  flutter_dotenv: ^5.0.2
+  convert: ^3.1.1
+  get: ^4.6.5
+  get_storage: ^2.0.3
+  flutter_circle_color_picker: ^0.3.0
+  
+
+
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +112,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/images/
+    - .env # API Key is stored here
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

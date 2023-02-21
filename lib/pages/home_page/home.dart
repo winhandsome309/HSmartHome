@@ -36,11 +36,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.grey[100],
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.grey[100],
         iconSize: 25,
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[

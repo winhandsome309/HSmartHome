@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:hsmarthome/util/smart_device_box.dart';
-// import 'package:hsmarthome/pages/dashboard_page/dashboard.dart';
+import 'package:hsmarthome/data/models/adafruit_get.dart';
+import 'package:get/get.dart';
+import 'dart:async';
+import 'package:hsmarthome/data/provider/TempHumidAPI.dart';
+import 'package:hsmarthome/data/models/room_model.dart';
+import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
+// import 'package:logging/logging.dart';
+// import 'package:stack_trace/stack_trace.dart';
+
+// import 'package:mqtt_client/mqtt_browser_client.dart';
+// import 'package:mqtt_client/mqtt_client.dart';
+// import 'package:mqtt_client/mqtt_server_client.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -12,17 +21,43 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   // padding constants
+
+  RxInt _currentIndex = 0.obs;
+  get currentIndex => this._currentIndex.value;
+
   final double horizontalPadding = 30;
   final double verticalPadding = 25;
+
+  late StreamController<AdafruitGET> tempStream;
+
+  setCurrentIndex(int index) {
+    _currentIndex.value = index;
+    if (index == 1 || index == 2) {
+      print('Hello World');
+      tempStream.close();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: const Center(
-          child: Text(
-        'Account Page',
-      )),
+      backgroundColor: Colors.grey[100],
+      body: SafeArea(
+        child: Center(
+          child: GestureDetector(
+            onTap: () => {
+              setCurrentIndex(1),
+            },
+            child: const Text(
+              'Register now',
+              style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

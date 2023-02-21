@@ -4,12 +4,20 @@ import 'package:hsmarthome/pages/login_page/auth_page.dart';
 // import 'pages/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/services.dart';
 
-Future main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     name: 'HSmartHome',
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await dotenv.load();
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 
   runApp(const MyApp());
