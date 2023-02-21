@@ -33,9 +33,26 @@ class _AccountPageState extends State<AccountPage> {
   setCurrentIndex(int index) {
     _currentIndex.value = index;
     if (index == 1 || index == 2) {
-      print('Hello World');
       tempStream.close();
+    } else if (index == 0) {
+      streamInit();
     }
+  }
+
+  retreveSensorData() async {
+    // AdafruitGET temperature data fetch
+    AdafruitGET temper = await TempHumidAPI.getTempData();
+    tempStream.add(temper);
+  }
+
+  streamInit() {
+    tempStream = StreamController();
+    Timer.periodic(
+      Duration(seconds: 3),
+      (_) {
+        retreveSensorData();
+      },
+    );
   }
 
   @override
@@ -46,7 +63,7 @@ class _AccountPageState extends State<AccountPage> {
         child: Center(
           child: GestureDetector(
             onTap: () => {
-              setCurrentIndex(1),
+              setCurrentIndex(0),
             },
             child: const Text(
               'Register now',
