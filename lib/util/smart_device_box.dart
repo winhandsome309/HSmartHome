@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 
 class SmartDeviceBox extends StatefulWidget {
-  final String smartDeviceName;
-  final String iconPath;
-  final bool powerOn;
+  String smartDeviceName;
+  String iconPath;
+  bool powerOn;
   void Function(bool)? onChanged;
 
   SmartDeviceBox({

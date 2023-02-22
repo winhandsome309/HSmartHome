@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hsmarthome/pages/login_page/login_page.dart';
 // import 'package:hsmarthome/pages/home_page/home_page.dart';
-import 'package:hsmarthome/pages/home_page/home.dart';
+import 'package:hsmarthome/pages/app/buttom_home.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});

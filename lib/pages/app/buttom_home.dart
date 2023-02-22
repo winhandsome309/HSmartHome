@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hsmarthome/pages/account/account_page.dart';
-import 'package:hsmarthome/pages/dashboard_page/dashboard.dart';
-import 'package:hsmarthome/pages/home_page/home_page.dart';
-import 'package:hsmarthome/pages/notification/notification_page.dart';
+import 'package:hsmarthome/pages/app/account_page/account_page.dart';
+import 'package:hsmarthome/pages/app/dashboard_page/dashboard.dart';
+import 'package:hsmarthome/pages/app/home_page/home_page.dart';
+import 'package:hsmarthome/pages/app/notification_page/noti_page.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:hsmarthome/util/smart_device_box.dart';
 // import 'package:hsmarthome/pages/dashboard_page/dashboard.dart';
@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           HomePage(),
           Dashboard(),
-          NotificationPage(),
+          NotiPage(),
           AccountPage(),
         ],
         index: _selectedIndex,

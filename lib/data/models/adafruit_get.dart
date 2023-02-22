@@ -6,50 +6,50 @@ class AdafruitGET {
     this.owner,
     this.id,
     this.name,
-    // this.description,
-    // this.license,
-    // this.history,
-    // this.enabled,
-    // this.visibility,
-    // this.unitType,
-    // this.unitSymbol,
-    // this.lastValue,
-    // this.createdAt,
-    // this.updatedAt,
-    // this.statusNotify,
-    // this.statusTimeout,
-    // this.status,
+    this.description,
+    this.license,
+    this.history,
+    this.enabled,
+    this.visibility,
+    this.unitType,
+    this.unitSymbol,
+    this.lastValue,
+    this.createdAt,
+    this.updatedAt,
+    this.statusNotify,
+    this.statusTimeout,
+    this.status,
     this.key,
-    // this.writable,
-    // this.group,
-    // this.groups,
-    // this.feedWebhookReceivers,
-    // this.feedStatusChanges,
+    this.writable,
+    this.group,
+    this.groups,
+    this.feedWebhookReceivers,
+    this.feedStatusChanges,
   });
 
   String? username;
   Owner? owner;
   int? id;
   String? name;
-  // String? description;
-  // dynamic license;
-  // bool? history;
-  // bool? enabled;
-  // String? visibility;
-  // dynamic unitType;
-  // dynamic unitSymbol;
-  // String? lastValue;
-  // DateTime? createdAt;
-  // DateTime? updatedAt;
-  // bool? statusNotify;
-  // int? statusTimeout;
-  // String? status;
+  String? description;
+  dynamic license;
+  bool? history;
+  bool? enabled;
+  String? visibility;
+  dynamic unitType;
+  dynamic unitSymbol;
+  String? lastValue;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  bool? statusNotify;
+  int? statusTimeout;
+  String? status;
   String? key;
-  // bool? writable;
-  // Group? group;
-  // List<Group>? groups;
-  // List<dynamic>? feedWebhookReceivers;
-  // List<dynamic>? feedStatusChanges;
+  bool? writable;
+  Group? group;
+  List<Group>? groups;
+  List<dynamic>? feedWebhookReceivers;
+  List<dynamic>? feedStatusChanges;
 
   factory AdafruitGET.fromRawJson(String str) =>
       AdafruitGET.fromJson(json.decode(str));
@@ -61,27 +61,27 @@ class AdafruitGET {
         owner: Owner.fromJson(json["owner"]),
         id: json["id"],
         name: json["name"],
-        // description: json["description"],
-        // license: json["license"],
-        // history: json["history"],
-        // enabled: json["enabled"],
-        // visibility: json["visibility"],
-        // unitType: json["unit_type"],
-        // unitSymbol: json["unit_symbol"],
-        // lastValue: json["last_value"],
-        // createdAt: DateTime.parse(json["created_at"]),
-        // updatedAt: DateTime.parse(json["updated_at"]),
-        // statusNotify: json["status_notify"],
-        // statusTimeout: json["status_timeout"],
-        // status: json["status"],
+        description: json["description"],
+        license: json["license"],
+        history: json["history"],
+        enabled: json["enabled"],
+        visibility: json["visibility"],
+        unitType: json["unit_type"],
+        unitSymbol: json["unit_symbol"],
+        lastValue: json["last_value"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        statusNotify: json["status_notify"],
+        statusTimeout: json["status_timeout"],
+        status: json["status"],
         key: json["key"],
-        // writable: json["writable"],
-        // group: Group.fromJson(json["group"]),
-        // groups: List<Group>.from(json["groups"].map((x) => Group.fromJson(x))),
-        // feedWebhookReceivers:
-        //     List<dynamic>.from(json["feed_webhook_receivers"].map((x) => x)),
-        // feedStatusChanges:
-        //     List<dynamic>.from(json["feed_status_changes"].map((x) => x)),
+        writable: json["writable"],
+        group: Group.fromJson(json["group"]),
+        groups: List<Group>.from(json["groups"].map((x) => Group.fromJson(x))),
+        feedWebhookReceivers:
+            List<dynamic>.from(json["feed_webhook_receivers"].map((x) => x)),
+        feedStatusChanges:
+            List<dynamic>.from(json["feed_status_changes"].map((x) => x)),
       );
 
   Map<String?, dynamic> toJson() => {
@@ -89,27 +89,27 @@ class AdafruitGET {
         "owner": owner?.toJson(),
         "id": id,
         "name": name,
-        // "description": description,
-        // "license": license,
-        // "history": history,
-        // "enabled": enabled,
-        // "visibility": visibility,
-        // "unit_type": unitType,
-        // "unit_symbol": unitSymbol,
-        // "last_value": lastValue,
-        // "created_at": createdAt?.toIso8601String(),
-        // "updated_at": updatedAt?.toIso8601String(),
-        // "status_notify": statusNotify,
-        // "status_timeout": statusTimeout,
-        // "status": status,
+        "description": description,
+        "license": license,
+        "history": history,
+        "enabled": enabled,
+        "visibility": visibility,
+        "unit_type": unitType,
+        "unit_symbol": unitSymbol,
+        "last_value": lastValue,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "status_notify": statusNotify,
+        "status_timeout": statusTimeout,
+        "status": status,
         "key": key,
-        // "writable": writable,
-        // "group": group?.toJson(),
-        // "groups": List<dynamic>.from(groups!.map((x) => x.toJson())),
-        // "feed_webhook_receivers":
-        //     List<dynamic>.from(feedWebhookReceivers!.map((x) => x)),
-        // "feed_status_changes":
-        //     List<dynamic>.from(feedStatusChanges!.map((x) => x)),
+        "writable": writable,
+        "group": group?.toJson(),
+        "groups": List<dynamic>.from(groups!.map((x) => x.toJson())),
+        "feed_webhook_receivers":
+            List<dynamic>.from(feedWebhookReceivers!.map((x) => x)),
+        "feed_status_changes":
+            List<dynamic>.from(feedStatusChanges!.map((x) => x)),
       };
 }
 
