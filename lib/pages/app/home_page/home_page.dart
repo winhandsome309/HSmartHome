@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/util/smart_device_box.dart';
-import 'package:hsmarthome/data/provider/tempHumidAPI.dart';
-import 'package:hsmarthome/data/models/adafruit_get.dart';
-import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
-  _HomePageState asynLed = new _HomePageState();
+  // _HomePageState asynLed = new _HomePageState();
+  // final controller = Get.put(HomeController());
 
-  initialLed() {
-    asynLed.mySmartDevices[0][2] = true;
-  }
+  // initialLed() {
+  //   asynLed.mySmartDevices[0][2] = true;
+  // }
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,6 +21,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // padding constants
+
+  // CollectionReference users = FirebaseFirestore.instance('users');
+
+  initState() {
+    super.initState();
+    if (HomeController.ledToggled != mySmartDevices[0][2]) {
+      setState(() {
+        mySmartDevices[0][2] = HomeController.ledToggled;
+      });
+    }
+    // feedPage = FeedPage(this.callback);
+
+    // currentPage = feedPage;
+  }
+
   final double horizontalPadding = 30;
   final double verticalPadding = 25;
 
@@ -29,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   bool a = true;
   // list of smart devices
-  List mySmartDevices = [
+  static List mySmartDevices = [
     // [ smartDeviceName, iconPath , powerStatus ]
     ["Smart Light", "lib/images/light-bulb.png", false],
     ["Smart AC", "lib/images/air-conditioner.png", false],

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +15,23 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _usernameController = TextEditingController();
 
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   bool _passwordVisible = true;
   bool enabled = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _usernameController.dispose();
+  }
 
   Future signUserUp() async {
     // Show loading circle.
@@ -34,11 +44,12 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
     try {
-      if (passwordController.text == confirmPasswordController.text) {
+      if (_passwordController.text == _confirmPasswordController.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
         );
+        addUserDetails(_usernameController.text, _emailController.text);
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
         setState(() {
@@ -59,6 +70,13 @@ class _RegisterPageState extends State<RegisterPage> {
         enabled = false;
       });
     }
+  }
+
+  Future addUserDetails(String username, String email) async {
+    await FirebaseFirestore.instance.collection('users').add({
+      'username': username,
+      'email': email,
+    });
   }
 
   void showErrorMessage(String message) {
@@ -103,18 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 15.0),
-                // FloatingActionButton.extended(
-                //   onPressed: () {
-                //     const LoginPage();
-                //   },
-                //   backgroundColor: Colors.blue,
-                //   label: const Text(
-                //     "Login",
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: () => {
                     Navigator.push(
@@ -187,6 +193,29 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextFormField(
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        hintText: 'Username',
+                        prefixIcon: const Icon(Icons.person),
+                      ),
+                      controller: _usernameController,
+                      obscureText: false,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Email textfield
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextFormField(
                       validator: validateEmail,
                       decoration: InputDecoration(
                         enabledBorder: const OutlineInputBorder(
@@ -200,7 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         hintText: 'Email',
                         prefixIcon: const Icon(Icons.mail),
                       ),
-                      controller: emailController,
+                      controller: _emailController,
                       obscureText: false,
                     ),
                   ),
@@ -237,7 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                       ),
-                      controller: passwordController,
+                      controller: _passwordController,
                       obscureText: _passwordVisible,
                     ),
                   ),
@@ -273,7 +302,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                         ),
                       ),
-                      controller: confirmPasswordController,
+                      controller: _confirmPasswordController,
                       obscureText: _passwordVisible,
                     ),
                   ),

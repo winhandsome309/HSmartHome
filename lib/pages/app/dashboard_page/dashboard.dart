@@ -21,15 +21,8 @@ class _DashboardState extends State<Dashboard> {
   ///heheheh
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => {},
-      child: const Text(
-        'Register now',
-        style: TextStyle(
-          color: Colors.blue,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+    return Center(
+      child: Text('Dashboard'),
     );
   }
 }

@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hsmarthome/pages/login_page/register_page.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hsmarthome/service/auth_service.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
+import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -61,8 +60,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  HomeController x = HomeController();
   @override
   Widget build(BuildContext context) {
+    x.streamInit();
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -183,6 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () async {
                       if (_key.currentState!.validate()) {
                         await signUserIn();
+                        // this.widget.callback(new HomePage())
                       } else {
                         setState(() {
                           enabled = false;
