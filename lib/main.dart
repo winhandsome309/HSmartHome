@@ -6,6 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
+import 'package:hsmarthome/modules/home_controller/home_controller.dart';
+import 'package:get/get.dart';
+import 'package:hsmarthome/pages/app/home_page/home_page.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,14 +23,28 @@ Future main() async {
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
+
+  // HomeController homeController = HomeController();
+
+  final controller = Get.put(HomeController());
+  // final home_led = Get.put(HomePage());
+  HomePage home_led = new HomePage();
+
+  void syncLed() {
+    if (controller.ledToggled == true) {
+      home_led.initialLed();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    controller.streamInit();
+    syncLed();
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AuthPage(),
