@@ -1,28 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class Dashboard extends StatefulWidget {
-//   const Dashboard({super.key});
-
-//   @override
-//   State<Dashboard> createState() => _DashboardState();
-// }
-
-// class _DashboardState extends State<Dashboard>
-//     with SingleTickerProviderStateMixin {
-//   // padding constants
-//   final double horizontalPadding = 30;
-//   final double verticalPadding = 25;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-
-//       ),
-//     );
-//   }
-// }
-
 import 'dart:async';
 import 'dart:math';
 
@@ -31,8 +6,8 @@ import 'package:hsmarthome/bar_chart/extensions/color_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+class BarChartSample1 extends StatefulWidget {
+  BarChartSample1({super.key});
 
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
@@ -46,13 +21,13 @@ class Dashboard extends StatefulWidget {
   final Color barBackgroundColor =
       AppColors.contentColorWhite.darken().withOpacity(0.3);
   final Color barColor = AppColors.contentColorWhite;
-  final Color touchedBarColor = AppColors.contentColorBlack;
+  final Color touchedBarColor = AppColors.contentColorGreen;
 
   @override
-  State<StatefulWidget> createState() => DashboardState();
+  State<StatefulWidget> createState() => BarChartSample1State();
 }
 
-class DashboardState extends State<Dashboard> {
+class BarChartSample1State extends State<BarChartSample1> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
@@ -61,134 +36,73 @@ class DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        const SizedBox(height: 50),
-                        Text(
-                          'Power Statistics',
-                          style: TextStyle(
-                            color: AppColors.contentColorBlack.lighten(),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 38,
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: BarChart(
-                              isPlaying ? randomData() : mainBarData(),
-                              swapAnimationDuration: animDuration,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                      ],
-                    ),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                const Text(
+                  'Mingguan',
+                  style: TextStyle(
+                    color: AppColors.contentColorGreen,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20, top: 50),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: IconButton(
-                        icon: Icon(
-                          isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: AppColors.contentColorGreen,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            isPlaying = !isPlaying;
-                            if (isPlaying) {
-                              refreshState();
-                            }
-                          });
-                        },
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "Power consumption of appliances",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.grey.shade800,
                 ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  'Grafik konsumsi kalori',
+                  style: TextStyle(
+                    color: AppColors.contentColorGreen.darken(),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 38,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: BarChart(
+                      isPlaying ? randomData() : mainBarData(),
+                      swapAnimationDuration: animDuration,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: AppColors.contentColorGreen,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPlaying = !isPlaying;
+                    if (isPlaying) {
+                      refreshState();
+                    }
+                  });
+                },
               ),
             ),
-            const SizedBox(height: 20),
-            SizedBox(
-              height: 300,
-              child: ListView(
-                children: [
-                  Options(
-                    iconRow: Icons.person,
-                    s: 'My Account',
-                    k: 149,
-                    onTap: () {},
-                  ),
-                  // const Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  //   child: Divider(
-                  //     thickness: 1,
-                  //     color: Color.fromARGB(255, 204, 204, 204),
-                  //   ),
-                  // ),
-                  Options(
-                    iconRow: Icons.settings,
-                    s: 'Settings',
-                    k: 172,
-                    onTap: () {},
-                  ),
-                  Options(
-                    iconRow: Icons.help_center,
-                    s: 'Help Center',
-                    k: 150,
-                    onTap: () {},
-                  ),
-                  Options(
-                    iconRow: Icons.logout,
-                    s: 'Log Out',
-                    k: 175,
-                    onTap: () => {},
-                  ),
-                  Options(
-                    iconRow: Icons.logout,
-                    s: 'Log Out',
-                    k: 175,
-                    onTap: () => {},
-                  ),
-                  Options(
-                    iconRow: Icons.logout,
-                    s: 'Log Out',
-                    k: 175,
-                    onTap: () => {},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -341,7 +255,7 @@ class DashboardState extends State<Dashboard> {
 
   Widget getTitles(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Colors.black54,
+      color: Colors.white,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
@@ -479,42 +393,5 @@ class DashboardState extends State<Dashboard> {
     if (isPlaying) {
       await refreshState();
     }
-  }
-}
-
-class Options extends StatelessWidget {
-  final IconData iconRow;
-  final String s;
-  final double k;
-  final Function()? onTap;
-  const Options({
-    super.key,
-    required this.iconRow,
-    required this.s,
-    required this.k,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(25),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Row(
-          children: [
-            Icon(iconRow),
-            const SizedBox(width: 20),
-            Text(s, style: Theme.of(context).textTheme.bodyMedium),
-            SizedBox(width: k),
-            const Icon(Icons.arrow_forward_ios),
-          ],
-        ),
-      ),
-    );
   }
 }

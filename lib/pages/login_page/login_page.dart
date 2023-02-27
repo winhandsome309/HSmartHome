@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hsmarthome/pages/login_page/auth_page.dart';
 import 'package:hsmarthome/pages/login_page/register_page.dart';
 import 'package:hsmarthome/service/auth_service.dart';
 import 'dart:async';
@@ -37,6 +38,11 @@ class _LoginPageState extends State<LoginPage> {
       );
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AuthPage()),
+      );
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       showErrorMessage(e.code);
@@ -62,10 +68,16 @@ class _LoginPageState extends State<LoginPage> {
 
   HomeController x = HomeController();
   @override
-  Widget build(BuildContext context) {
+  initState() {
+    super.initState();
     x.streamInit();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // x.streamInit();
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      // backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Form(
           key: _key,
@@ -184,7 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () async {
                       if (_key.currentState!.validate()) {
                         await signUserIn();
-                        // this.widget.callback(new HomePage())
                       } else {
                         setState(() {
                           enabled = false;

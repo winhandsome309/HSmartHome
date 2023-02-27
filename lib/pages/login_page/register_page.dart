@@ -73,10 +73,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future addUserDetails(String username, String email) async {
-    await FirebaseFirestore.instance.collection('users').add({
-      'username': username,
-      'email': email,
-    });
+    await FirebaseFirestore.instance
+        .collection('users')
+        .add({
+          'username': username,
+          'email': email,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
   }
 
   void showErrorMessage(String message) {
@@ -159,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      // backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Form(
           key: _key,

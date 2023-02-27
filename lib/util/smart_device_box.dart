@@ -26,7 +26,7 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(12.0),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
@@ -40,10 +40,24 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // icon
-              Image.asset(
-                widget.iconPath,
-                height: 65,
-                color: widget.powerOn ? Colors.white : Colors.grey.shade700,
+              Row(
+                children: [
+                  SizedBox(
+                    width: 13,
+                  ),
+                  Image.asset(
+                    widget.iconPath,
+                    height: 60,
+                    color: widget.powerOn ? Colors.white : Colors.grey.shade900,
+                  ),
+                  SizedBox(
+                    width: 33,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    color: widget.powerOn ? Colors.white : Colors.black,
+                  ),
+                ],
               ),
 
               // smart device name + switch
@@ -51,12 +65,12 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
+                      padding: const EdgeInsets.only(left: 16.0),
                       child: Text(
                         widget.smartDeviceName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 18,
                           color: widget.powerOn ? Colors.white : Colors.black,
                         ),
                       ),
