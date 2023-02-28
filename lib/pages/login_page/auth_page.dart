@@ -2,9 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hsmarthome/pages/login_page/login_page.dart';
 import 'package:hsmarthome/pages/app/buttom_home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
+  Future addUserDetails(String username, String email) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user?.uid)
+        .set({
+          'username': username,
+          'email': email,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {

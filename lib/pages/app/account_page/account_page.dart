@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:image_picker/image_picker.dart';
 // import 'package:hsmarthome/data/models/adafruit_get.dart';
 // import 'package:get/get.dart';
 // import 'dart:async';
@@ -27,6 +32,34 @@ class _AccountPageState extends State<AccountPage> {
   final double horizontalPadding = 30;
   final double verticalPadding = 25;
 
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+
+  Future uploadFile() async {
+    final path = 'files/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+    final ref = FirebaseStorage.instance.ref().child(path);
+    setState(() {
+      uploadTask = ref.putFile(file);
+    });
+    final snapshot = await uploadTask!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    print('Download Link: $urlDownload');
+    // setState(() {
+    //   uploadTask = null;
+    // });
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+    });
+    uploadFile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,14 +81,24 @@ class _AccountPageState extends State<AccountPage> {
                   clipBehavior: Clip.none,
                   fit: StackFit.expand,
                   children: [
-                    const CircleAvatar(
-                      backgroundImage: AssetImage('lib/images/icon_google.png'),
-                    ),
+                    if (pickedFile == null)
+                      const CircleAvatar(
+                        backgroundImage:
+                            AssetImage('lib/images/icon_google.png'),
+                      ),
+                    if (pickedFile != null)
+                      Container(
+                        child: Image.file(
+                          File(pickedFile!.path!),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     Positioned(
                       right: -12,
                       bottom: 0,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: selectFile,
                         child: Container(
                           height: 46,
                           width: 46,
