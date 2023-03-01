@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:hsmarthome/util/smart_device_box.dart';
-// import 'package:hsmarthome/pages/dashboard_page/dashboard.dart';
+import 'dart:async';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
 class NotiPage extends StatefulWidget {
   const NotiPage({super.key});
@@ -18,7 +19,7 @@ class _NotiPageState extends State<NotiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Color.fromRGBO(242, 242, 246, 1),
       body: const Center(
           child: Text(
         'Notification',

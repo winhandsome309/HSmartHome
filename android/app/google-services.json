@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1062158820259-b2qbakc1rt5ininh8nnj40t1cites3qf.apps.googleusercontent.com",
+          "client_id": "1062158820259-jrl7upick8e43ktbvdt8av65lgdt5ka2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hsmarthome",
+            "certificate_hash": "7dba0be50b1b9fdd9e2aebfab2186f79160e7b0b"
+          }
+        },
+        {
+          "client_id": "1062158820259-1apobjd5e23iv89i6i6245qsj0ji2kel.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1062158820259-b2qbakc1rt5ininh8nnj40t1cites3qf.apps.googleusercontent.com",
+              "client_id": "1062158820259-1apobjd5e23iv89i6i6245qsj0ji2kel.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

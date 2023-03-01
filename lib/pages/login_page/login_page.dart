@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       // ignore: use_build_context_synchronously
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AuthPage()),
+        MaterialPageRoute(builder: (context) => const AuthPage()),
       );
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);

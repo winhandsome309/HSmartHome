@@ -1,65 +1,41 @@
+// import 'dart:html';
+
+// import 'dart:html';
+
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/util/smart_device_box.dart';
 import 'package:get/get.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:hsmarthome/data/read_firestore/read_username.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
-  // _HomePageState asynLed = new _HomePageState();
-  // final controller = Get.put(HomeController());
-
-  // initialLed() {
-  //   asynLed.mySmartDevices[0][2] = true;
-  // }
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // padding constants
-
-  // CollectionReference users = FirebaseFirestore.instance('users');
-
   @override
   initState() {
-    super.initState();
-    // getName();
     if (HomeController.ledToggled != mySmartDevices[0][2]) {
       setState(() {
         mySmartDevices[0][2] = HomeController.ledToggled;
       });
     }
-    // feedPage = FeedPage(this.callback);
-
-    // currentPage = feedPage;
+    super.initState();
   }
-
-  // readData() {
-  //   DocumentReference documentReference = FirebaseFirestore.instance.collection('users')
-  // }
 
   final double horizontalPadding = 30;
   final double verticalPadding = 25;
 
   final controller = Get.put(HomeController());
-
-  // final User? user = FirebaseAuth.instance.currentUser;
-  // dynamic data;
-
-  // DocumentSnapshot? documentSnapshot;
-
-  // Future<dynamic> getName() async {
-  //   documentSnapshot = await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc('$user.uid')
-  //       .get();
-  // }
 
   bool a = true;
   // list of smart devices
@@ -79,10 +55,6 @@ class _HomePageState extends State<HomePage> {
     });
     controller.onSwitched(0);
   }
-
-  // void onReady() {
-  //   super.onReady();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                   //   color: Colors.grey[800],
                   // ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0),
+                    padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -123,11 +95,12 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               fontSize: 16, color: Colors.grey.shade800),
                         ),
-                        Text(
-                          'Thang Nguyen',
-                          // documentSnapshot['username'].toString(),
-                          style: GoogleFonts.bebasNeue(fontSize: 40),
-                        ),
+
+                        // Text(
+
+                        // documentSnapshot['username'].toString(),
+                        //   style: GoogleFonts.bebasNeue(fontSize: 40),
+                        // ),
                       ],
                     ),
                   ),
@@ -174,13 +147,13 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: const [
                       Padding(
-                        padding: const EdgeInsets.only(left: 35, right: 35),
+                        padding: EdgeInsets.only(left: 35, right: 35),
                         child: Text('00:00\nTP.HCM'),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 35, right: 35),
+                        padding: EdgeInsets.only(left: 35, right: 35),
                         child: Text('30'),
                       ),
                     ],
@@ -214,7 +187,7 @@ class _HomePageState extends State<HomePage> {
             //   ),
             // ),
 
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
 
@@ -320,38 +293,45 @@ class _HomePageState extends State<HomePage> {
 
             // grid
 
-            Scrollbar(
-              child: SizedBox(
-                height: 492,
+            // Scrollbar(
+            //   child: SizedBox(
+            //     height: 492,
+            //     child: ListView(
+            //       physics: const BouncingScrollPhysics(),
+            // children: [
+            Expanded(
+              child: Scrollbar(
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    Expanded(
-                      child: GridView.builder(
-                        itemCount: 5,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.3,
-                        ),
-                        itemBuilder: (context, index) {
-                          return SmartDeviceBox(
-                            smartDeviceName: mySmartDevices[index][0],
-                            iconPath: mySmartDevices[index][1],
-                            powerOn: mySmartDevices[index][2],
-                            onChanged: (value) =>
-                                powerSwitchChanged(value, index),
-                          );
-                        },
+                    GridView.builder(
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1 / 1.3,
                       ),
+                      itemBuilder: (context, index) {
+                        return SmartDeviceBox(
+                          smartDeviceName: mySmartDevices[index][0],
+                          iconPath: mySmartDevices[index][1],
+                          powerOn: mySmartDevices[index][2],
+                          onChanged: (value) =>
+                              powerSwitchChanged(value, index),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
             ),
+            // ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

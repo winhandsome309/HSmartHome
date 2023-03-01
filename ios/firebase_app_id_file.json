@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:431003137592:ios:81da7079ee7aa14f2ed8cd",
-  "FIREBASE_PROJECT_ID": "hsmarthome-firebase",
-  "GCM_SENDER_ID": "431003137592"
+  "GOOGLE_APP_ID": "1:1062158820259:ios:58aa9f786b89a9aee43016",
+  "FIREBASE_PROJECT_ID": "hsmarthome-5df28",
+  "GCM_SENDER_ID": "1062158820259"
 }

@@ -42,7 +42,7 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
               // icon
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 13,
                   ),
                   Image.asset(
@@ -50,7 +50,7 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
                     height: 60,
                     color: widget.powerOn ? Colors.white : Colors.grey.shade900,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 33,
                   ),
                   Icon(

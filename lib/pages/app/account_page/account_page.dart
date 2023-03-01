@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 // import 'package:image_picker/image_picker.dart';
 // import 'package:hsmarthome/data/models/adafruit_get.dart';
 // import 'package:get/get.dart';
@@ -63,81 +64,246 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      // backgroundColor: Color.fromRGBO(242, 242, 246, 1),
+      backgroundColor: Color.fromRGBO(238, 238, 240, 1),
       body: SafeArea(
         child: Center(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 50),
-              const Text(
-                'Profile',
-                style: TextStyle(fontSize: 18, color: Colors.grey),
-              ),
-              const SizedBox(height: 30),
-              SizedBox(
-                height: 115,
-                width: 115,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  fit: StackFit.expand,
+              Padding(
+                padding: EdgeInsets.only(
+                  // top: horizontalPadding,
+                  top: 25,
+                  left: verticalPadding,
+                  right: verticalPadding,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (pickedFile == null)
-                      const CircleAvatar(
-                        backgroundImage:
-                            AssetImage('lib/images/icon_google.png'),
-                      ),
-                    if (pickedFile != null)
-                      Container(
-                        child: Image.file(
-                          File(pickedFile!.path!),
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    Positioned(
-                      right: -12,
-                      bottom: 0,
-                      child: GestureDetector(
-                        onTap: selectFile,
-                        child: Container(
-                          height: 46,
-                          width: 46,
-                          decoration:
-                              BoxDecoration(color: Colors.grey.shade300),
-                          child: const Center(child: Icon(Icons.camera_alt)),
-                        ),
+                    // menu icon
+                    // Icon(
+                    //   Icons.menu,
+                    //   size: 45,
+                    //   color: Colors.grey[800],
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "My Account",
+                            style: GoogleFonts.lexendDeca(
+                              fontSize: 23,
+                              color: Color.fromRGBO(72, 72, 74, 1),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          // Text(
+
+                          // documentSnapshot['username'].toString(),
+                          //   style: GoogleFonts.bebasNeue(fontSize: 40),
+                          // ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 60),
-              Options(
-                iconRow: Icons.person,
-                s: 'My Account',
-                k: 149,
+              // SizedBox(
+              //   height: 115,
+              //   width: 115,
+              //   child: Stack(
+              //     clipBehavior: Clip.none,
+              //     fit: StackFit.expand,
+              //     children: [
+              //       if (pickedFile == null)
+              //         const CircleAvatar(
+              //           backgroundImage:
+              //               AssetImage('lib/images/icon_google.png'),
+              //         ),
+              //       if (pickedFile != null)
+              //         Container(
+              //           child: Image.file(
+              //             File(pickedFile!.path!),
+              //             width: double.infinity,
+              //             fit: BoxFit.cover,
+              //           ),
+              //         ),
+              //       Positioned(
+              //         right: -12,
+              //         bottom: 0,
+              //         child: GestureDetector(
+              //           onTap: selectFile,
+              //           child: Container(
+              //             height: 46,
+              //             width: 46,
+              //             decoration:
+              //                 BoxDecoration(color: Colors.grey.shade300),
+              //             child: const Center(child: Icon(Icons.camera_alt)),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              const SizedBox(height: 30),
+              // Options(
+              //   iconRow: Icons.person,
+              //   s: 'My Account',
+              //   k: 149,
+              //   onTap: () {},
+              // ),
+              GestureDetector(
                 onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.symmetric(horizontal: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const CircleAvatar(
+                        radius: 40,
+                        backgroundImage:
+                            AssetImage('lib/images/icon_google.png'),
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Welcome,',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color.fromRGBO(122, 115, 115, 1),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'Win Handsome',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            'xuanthangnguyen@gmail.com',
+                            style: TextStyle(
+                              fontSize: 12,
+                              // color: Color.fromRGBO(122, 115, 115, 1),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 36),
+                      const Icon(Icons.arrow_forward_ios_outlined),
+                    ],
+                  ),
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Options(
                 iconRow: Icons.settings,
-                s: 'Settings',
-                k: 172,
+                s: 'App settings',
+                k: 187,
+                varicolor: Color.fromRGBO(122, 115, 115, 1),
                 onTap: () {},
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 25),
               Options(
                 iconRow: Icons.help_center,
-                s: 'Help Center',
-                k: 150,
+                s: 'Help',
+                k: 248,
+                varicolor: Color.fromRGBO(122, 115, 115, 1),
                 onTap: () {},
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 25),
               Options(
                 iconRow: Icons.logout,
-                s: 'Log Out',
-                k: 175,
+                s: 'Log out',
+                k: 225,
+                varicolor: Color.fromRGBO(215, 51, 51, 1),
                 onTap: () => {singUserOut()},
+              ),
+              SizedBox(height: 220),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Privacy Policy',
+                    style: TextStyle(
+                      color: Color.fromRGBO(122, 115, 115, 1),
+                      fontSize: 13,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 11,
+                    color: Color.fromRGBO(122, 115, 115, 1),
+                  ),
+                  SizedBox(width: 55),
+                  Text(
+                    'Imprint',
+                    style: TextStyle(
+                      color: Color.fromRGBO(122, 115, 115, 1),
+                      fontSize: 13,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Color.fromRGBO(122, 115, 115, 1),
+                    size: 11,
+                  ),
+                  SizedBox(width: 55),
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Color.fromRGBO(122, 115, 115, 1),
+                    size: 16,
+                  ),
+                  Text(
+                    'English',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color.fromRGBO(122, 115, 115, 1),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Divider(
+                  thickness: 1,
+                  color: Color.fromARGB(255, 204, 204, 204),
+                ),
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.copyright,
+                    color: Color.fromRGBO(122, 115, 115, 1),
+                    size: 15,
+                  ),
+                  Text(
+                    ' Handsome Production 2023',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Color.fromRGBO(122, 115, 115, 1),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -151,12 +317,14 @@ class Options extends StatelessWidget {
   final IconData iconRow;
   final String s;
   final double k;
+  final Color varicolor;
   final Function()? onTap;
   const Options({
     super.key,
     required this.iconRow,
     required this.s,
     required this.k,
+    required this.varicolor,
     required this.onTap,
   });
 
@@ -165,19 +333,31 @@ class Options extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(25),
+        padding:
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
-            Icon(iconRow),
-            const SizedBox(width: 20),
-            Text(s, style: Theme.of(context).textTheme.bodyMedium),
+            // Icon(
+            //   iconRow,
+            //   color: varicolor,
+            // ),
+            const SizedBox(width: 15),
+            // Text(s, style: Theme.of(context).textTheme.bodyMedium),
+            Text(s,
+                style: TextStyle(
+                  color: varicolor,
+                  fontSize: 17,
+                )),
             SizedBox(width: k),
-            const Icon(Icons.arrow_forward_ios),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: varicolor,
+            ),
           ],
         ),
       ),
