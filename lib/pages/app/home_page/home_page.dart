@@ -3,7 +3,9 @@ import 'package:hsmarthome/util/smart_device_box.dart';
 import 'package:get/get.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   initState() {
     if (HomeController.ledToggled != mySmartDevices[0][2]) {
@@ -77,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                   // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: Column(
+                    child: FutureBuilder(future: FirebaseFirestore.instance.collection("users").where('email', isEqualTo: auth.currentUser?.email).get(), builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -85,14 +89,15 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(
                               fontSize: 16, color: Colors.grey.shade800),
                         ),
-
-                        // Text(
-
-                        // documentSnapshot['username'].toString(),
-                        //   style: GoogleFonts.bebasNeue(fontSize: 40),
-                        // ),
+                        Text(
+                          snapshot.data?.docs[0].get('username') ?? "username",
+                          style: GoogleFonts.bebasNeue(fontSize: 30),
+                        ),
                       ],
-                    ),
+                    );
+
+                      
+                    },),
                   ),
                   // account icon
                   Icon(
