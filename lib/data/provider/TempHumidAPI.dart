@@ -7,9 +7,9 @@ import 'package:hsmarthome/data/models/adafruit_get.dart';
 import 'package:http/http.dart' as http;
 
 class TempHumidAPI {
-  static String username = 'winhandsome';
+  static String username = 'huyhoang16';
   static String? aioKey = dotenv.env['API_Key'].toString();
-  static String led1Feed = 'bbc-led';
+  static String led1Feed = 'smart-home-led';
   static String mainURL = 'https://io.adafruit.com/api/v2/';
 
   static Future<AdafruitGET> getLed1Data() async {

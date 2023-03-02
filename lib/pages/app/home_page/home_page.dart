@@ -1,18 +1,8 @@
-// import 'dart:html';
-
-// import 'dart:html';
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/util/smart_device_box.dart';
 import 'package:get/get.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:hsmarthome/data/read_firestore/read_username.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -301,30 +291,29 @@ class _HomePageState extends State<HomePage> {
             // children: [
             Expanded(
               child: Scrollbar(
-                child: ListView(
+                child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  children: [
-                    GridView.builder(
-                      itemCount: 5,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1 / 1.3,
-                      ),
-                      itemBuilder: (context, index) {
-                        return SmartDeviceBox(
-                          smartDeviceName: mySmartDevices[index][0],
-                          iconPath: mySmartDevices[index][1],
-                          powerOn: mySmartDevices[index][2],
-                          onChanged: (value) =>
-                              powerSwitchChanged(value, index),
-                        );
-                      },
+                  // children: [
+                  child: GridView.builder(
+                    itemCount: 5,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.3,
                     ),
-                  ],
+                    itemBuilder: (context, index) {
+                      return SmartDeviceBox(
+                        smartDeviceName: mySmartDevices[index][0],
+                        iconPath: mySmartDevices[index][1],
+                        powerOn: mySmartDevices[index][2],
+                        onChanged: (value) => powerSwitchChanged(value, index),
+                      );
+                    },
+                  ),
+                  // ],
                 ),
               ),
             ),

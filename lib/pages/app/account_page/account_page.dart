@@ -156,84 +156,122 @@ class _AccountPageState extends State<AccountPage> {
               //   k: 149,
               //   onTap: () {},
               // ),
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.symmetric(horizontal: 25),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
+              SizedBox(
+                // height: 380,
+                height: 580,
+                child: Scrollbar(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
                     children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const CircleAvatar(
-                        radius: 40,
-                        backgroundImage:
-                            AssetImage('lib/images/icon_google.png'),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Welcome,',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Color.fromRGBO(122, 115, 115, 1),
-                            ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          // padding: const EdgeInsets.all(15),
+                          padding: const EdgeInsets.only(
+                              top: 15, bottom: 15, right: 10, left: 10),
+                          margin: const EdgeInsets.symmetric(horizontal: 25),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            'Win Handsome',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const CircleAvatar(
+                                radius: 40,
+                                backgroundImage:
+                                    AssetImage('lib/images/icon_google.png'),
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'Welcome,',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Color.fromRGBO(122, 115, 115, 1),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'Win Handsome',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'xuanthangnguyen@gmail.com',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      // color: Color.fromRGBO(122, 115, 115, 1),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: 36),
+                              const Icon(Icons.arrow_forward_ios_outlined),
+                            ],
                           ),
-                          SizedBox(height: 5),
-                          Text(
-                            'xuanthangnguyen@gmail.com',
-                            style: TextStyle(
-                              fontSize: 12,
-                              // color: Color.fromRGBO(122, 115, 115, 1),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                      SizedBox(width: 36),
-                      const Icon(Icons.arrow_forward_ios_outlined),
+                      const SizedBox(height: 30),
+                      Options(
+                        iconRow: Icons.settings,
+                        s: 'App settings',
+                        k: 187,
+                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 20),
+                      Options(
+                        iconRow: Icons.logout,
+                        s: 'User guide',
+                        k: 202,
+                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        onTap: () => {singUserOut()},
+                      ),
+                      const SizedBox(height: 20),
+                      Options(
+                        iconRow: Icons.logout,
+                        s: 'Frequently asked questions',
+                        k: 76,
+                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        onTap: () => {singUserOut()},
+                      ),
+                      const SizedBox(height: 20),
+                      Options(
+                        iconRow: Icons.logout,
+                        s: 'Update',
+                        k: 229,
+                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        onTap: () => {singUserOut()},
+                      ),
+                      const SizedBox(height: 20),
+                      Options(
+                        iconRow: Icons.help_center,
+                        s: 'Help',
+                        k: 248,
+                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        onTap: () {},
+                      ),
+                      const SizedBox(height: 20),
+                      Options(
+                        iconRow: Icons.logout,
+                        s: 'Log out',
+                        k: 225,
+                        varicolor: Color.fromRGBO(215, 51, 51, 1),
+                        onTap: () => {singUserOut()},
+                      ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
-              Options(
-                iconRow: Icons.settings,
-                s: 'App settings',
-                k: 187,
-                varicolor: Color.fromRGBO(122, 115, 115, 1),
-                onTap: () {},
-              ),
-              const SizedBox(height: 25),
-              Options(
-                iconRow: Icons.help_center,
-                s: 'Help',
-                k: 248,
-                varicolor: Color.fromRGBO(122, 115, 115, 1),
-                onTap: () {},
-              ),
-              const SizedBox(height: 25),
-              Options(
-                iconRow: Icons.logout,
-                s: 'Log out',
-                k: 225,
-                varicolor: Color.fromRGBO(215, 51, 51, 1),
-                onTap: () => {singUserOut()},
-              ),
-              SizedBox(height: 220),
+
+              SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -287,18 +325,18 @@ class _AccountPageState extends State<AccountPage> {
                   color: Color.fromARGB(255, 204, 204, 204),
                 ),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 3),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
+                children: [
+                  const Icon(
                     Icons.copyright,
                     color: Color.fromRGBO(122, 115, 115, 1),
                     size: 15,
                   ),
                   Text(
                     ' Handsome Production 2023',
-                    style: TextStyle(
+                    style: GoogleFonts.josefinSans(
                       fontSize: 10,
                       color: Color.fromRGBO(122, 115, 115, 1),
                     ),
@@ -334,7 +372,7 @@ class Options extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding:
-            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            const EdgeInsets.only(top: 17, bottom: 17, left: 10, right: 10),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           color: Colors.white,
