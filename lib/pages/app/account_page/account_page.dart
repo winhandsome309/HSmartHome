@@ -1,20 +1,9 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:hsmarthome/data/models/adafruit_get.dart';
-// import 'package:get/get.dart';
-// import 'dart:async';
-// import 'package:hsmarthome/data/provider/tempHumidAPI.dart';
-// import 'package:hsmarthome/data/models/room_model.dart';
-// import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
-// import 'package:logging/logging.dart';
-// import 'package:stack_trace/stack_trace.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -45,10 +34,6 @@ class _AccountPageState extends State<AccountPage> {
     });
     final snapshot = await uploadTask!.whenComplete(() {});
     final urlDownload = await snapshot.ref.getDownloadURL();
-    print('Download Link: $urlDownload');
-    // setState(() {
-    //   uploadTask = null;
-    // });
   }
 
   Future selectFile() async {
@@ -64,8 +49,7 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color.fromRGBO(242, 242, 246, 1),
-      backgroundColor: Color.fromRGBO(238, 238, 240, 1),
+      backgroundColor: const Color.fromRGBO(238, 238, 240, 1),
       body: SafeArea(
         child: Center(
           child: Column(
@@ -73,7 +57,6 @@ class _AccountPageState extends State<AccountPage> {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  // top: horizontalPadding,
                   top: 25,
                   left: verticalPadding,
                   right: verticalPadding,
@@ -81,12 +64,6 @@ class _AccountPageState extends State<AccountPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // menu icon
-                    // Icon(
-                    //   Icons.menu,
-                    //   size: 45,
-                    //   color: Colors.grey[800],
-                    // ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: Column(
@@ -100,62 +77,13 @@ class _AccountPageState extends State<AccountPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-
-                          // Text(
-
-                          // documentSnapshot['username'].toString(),
-                          //   style: GoogleFonts.bebasNeue(fontSize: 40),
-                          // ),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              // SizedBox(
-              //   height: 115,
-              //   width: 115,
-              //   child: Stack(
-              //     clipBehavior: Clip.none,
-              //     fit: StackFit.expand,
-              //     children: [
-              //       if (pickedFile == null)
-              //         const CircleAvatar(
-              //           backgroundImage:
-              //               AssetImage('lib/images/icon_google.png'),
-              //         ),
-              //       if (pickedFile != null)
-              //         Container(
-              //           child: Image.file(
-              //             File(pickedFile!.path!),
-              //             width: double.infinity,
-              //             fit: BoxFit.cover,
-              //           ),
-              //         ),
-              //       Positioned(
-              //         right: -12,
-              //         bottom: 0,
-              //         child: GestureDetector(
-              //           onTap: selectFile,
-              //           child: Container(
-              //             height: 46,
-              //             width: 46,
-              //             decoration:
-              //                 BoxDecoration(color: Colors.grey.shade300),
-              //             child: const Center(child: Icon(Icons.camera_alt)),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               const SizedBox(height: 30),
-              // Options(
-              //   iconRow: Icons.person,
-              //   s: 'My Account',
-              //   k: 149,
-              //   onTap: () {},
-              // ),
               SizedBox(
                 // height: 380,
                 height: 580,
@@ -166,7 +94,6 @@ class _AccountPageState extends State<AccountPage> {
                       GestureDetector(
                         onTap: () {},
                         child: Container(
-                          // padding: const EdgeInsets.all(15),
                           padding: const EdgeInsets.only(
                               top: 15, bottom: 15, right: 10, left: 10),
                           margin: const EdgeInsets.symmetric(horizontal: 25),
@@ -207,12 +134,11 @@ class _AccountPageState extends State<AccountPage> {
                                     'xuanthangnguyen@gmail.com',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      // color: Color.fromRGBO(122, 115, 115, 1),
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 36),
+                              const SizedBox(width: 36),
                               const Icon(Icons.arrow_forward_ios_outlined),
                             ],
                           ),
@@ -223,7 +149,7 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.settings,
                         s: 'App settings',
                         k: 187,
-                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () {},
                       ),
                       const SizedBox(height: 20),
@@ -231,7 +157,7 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.logout,
                         s: 'User guide',
                         k: 202,
-                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () => {singUserOut()},
                       ),
                       const SizedBox(height: 20),
@@ -239,7 +165,7 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.logout,
                         s: 'Frequently asked questions',
                         k: 76,
-                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () => {singUserOut()},
                       ),
                       const SizedBox(height: 20),
@@ -247,7 +173,7 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.logout,
                         s: 'Update',
                         k: 229,
-                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () => {singUserOut()},
                       ),
                       const SizedBox(height: 20),
@@ -255,7 +181,7 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.help_center,
                         s: 'Help',
                         k: 248,
-                        varicolor: Color.fromRGBO(122, 115, 115, 1),
+                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () {},
                       ),
                       const SizedBox(height: 20),
@@ -263,15 +189,14 @@ class _AccountPageState extends State<AccountPage> {
                         iconRow: Icons.logout,
                         s: 'Log out',
                         k: 225,
-                        varicolor: Color.fromRGBO(215, 51, 51, 1),
+                        varicolor: const Color.fromRGBO(215, 51, 51, 1),
                         onTap: () => {singUserOut()},
                       ),
                     ],
                   ),
                 ),
               ),
-
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -317,7 +242,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Divider(
@@ -325,7 +250,7 @@ class _AccountPageState extends State<AccountPage> {
                   color: Color.fromARGB(255, 204, 204, 204),
                 ),
               ),
-              SizedBox(height: 3),
+              const SizedBox(height: 3),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -338,7 +263,7 @@ class _AccountPageState extends State<AccountPage> {
                     ' Handsome Production 2023',
                     style: GoogleFonts.josefinSans(
                       fontSize: 10,
-                      color: Color.fromRGBO(122, 115, 115, 1),
+                      color: const Color.fromRGBO(122, 115, 115, 1),
                     ),
                   ),
                 ],
@@ -380,12 +305,7 @@ class Options extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Icon(
-            //   iconRow,
-            //   color: varicolor,
-            // ),
             const SizedBox(width: 15),
-            // Text(s, style: Theme.of(context).textTheme.bodyMedium),
             Text(s,
                 style: TextStyle(
                   color: varicolor,

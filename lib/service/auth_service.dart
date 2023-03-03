@@ -6,19 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
-  // Determine if the user is authenticated
-  // handleAuthState() {
-  //   return StreamBuilder(
-  //       stream: FirebaseAuth.instance.authStateChanges(),
-  //       builder: (BuildContext context, snapshot) {
-  //         if (snapshot.hasData) {
-  //           return const NewPage();
-  //         } else {
-  //           return const LoginPage();
-  //         }
-  //       });
-  // }
-
   // Google Sign In
   signInWithGoogle() async {
     // Begin interactive sign in process

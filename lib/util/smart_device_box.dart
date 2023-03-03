@@ -30,9 +30,7 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: widget.powerOn
-              ? Colors.grey[900]
-              : const Color.fromARGB(44, 164, 167, 189),
+          color: widget.powerOn ? Colors.grey[900] : Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hsmarthome/util/smart_device_box.dart';
 import 'package:get/get.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -15,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   initState() {
     if (HomeController.ledToggled != mySmartDevices[0][2]) {
@@ -52,13 +53,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(242, 242, 246, 1),
       body: SafeArea(
-        // child: SizedBox(
-        //   height: 800,
-        //   child: Scrollbar(
-        //     child: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -72,32 +69,32 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // menu icon
-                  // Icon(
-                  //   Icons.menu,
-                  //   size: 45,
-                  //   color: Colors.grey[800],
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
-                    child: FutureBuilder(future: FirebaseFirestore.instance.collection("users").where('email', isEqualTo: auth.currentUser?.email).get(), builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome Home,",
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.grey.shade800),
-                        ),
-                        Text(
-                          snapshot.data?.docs[0].get('username') ?? "username",
-                          style: GoogleFonts.bebasNeue(fontSize: 30),
-                        ),
-                      ],
-                    );
-
-                      
-                    },),
+                    child: FutureBuilder(
+                      future: FirebaseFirestore.instance
+                          .collection("users")
+                          .where('email', isEqualTo: auth.currentUser?.email)
+                          .get(),
+                      builder:
+                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Welcome Home,",
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.grey.shade800),
+                            ),
+                            Text(
+                              snapshot.data?.docs[0].get('username') ??
+                                  "username",
+                              style: GoogleFonts.bebasNeue(fontSize: 30),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ),
                   // account icon
                   Icon(
@@ -109,26 +106,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // const SizedBox(height: 10),
-
-            // welcome home
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: [
-            //       Text(
-            //         "Welcome Home,",
-            //         style: TextStyle(fontSize: 20, color: Colors.grey.shade800),
-            //       ),
-            //       Text(
-            //         'Thang Nguyen',
-            //         style: GoogleFonts.bebasNeue(fontSize: 60),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
             const SizedBox(height: 20),
 
             Padding(
@@ -136,7 +113,8 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
-                  color: const Color.fromARGB(44, 164, 167, 189),
+                  // color: const Color.fromARGB(44, 164, 167, 189),
+                  color: Colors.white,
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 25.0),
@@ -157,31 +135,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: 20,
-            //   ),
-            //   child: SizedBox(
-            //     height: 100,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: <Widget>[
-            //         SizedBox(width: 5),
-            //         Image.asset(
-            //           'lib/images/sun.png',
-            //           height: 60,
-            //           scale: 10,
-            //         ),
-            //         SizedBox(width: 5),
-            //         Text('30'),
-            //         SizedBox(width: 20),
-            //         Text('20'),
-            //         SizedBox(width: 10),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-
             const SizedBox(
               height: 30,
             ),
@@ -193,107 +146,9 @@ class _HomePageState extends State<HomePage> {
                 color: Color.fromARGB(255, 204, 204, 204),
               ),
             ),
-
-            // SizedBox(
-            //   height: 10,
-            // ),
-
-            // Container(
-            //   padding: const EdgeInsets.all(60),
-            //   // margin: const EdgeInsets.symmetric(horizontal: 38),
-            //   margin: const EdgeInsets.symmetric(horizontal: 60),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(24),
-            //     color: Color.fromARGB(44, 164, 167, 189),
-            // ),
-            // child: Row(
-            //   children: [
-            //     Image.asset(
-            //       'lib/images/sun.png',
-            //       height: 60,
-            //       color:  Colors.white ,
-            //     ),
-            //   ],
-            // ),
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         children: [
-            //           Icon(Icons.energy_savings_leaf_outlined),
-            //           Text(
-            //             'Estimate energy\nexpenses this month',
-            //           )
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
-            // const SizedBox(height: 25),
-
-            // Container(
-            //   padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-            //   height: 220,
-            //   width: double.infinity,
-            //   decoration: const BoxDecoration(
-            //     borderRadius: BorderRadius.only(
-            //       bottomLeft: Radius.circular(20),
-            //       bottomRight: Radius.circular(20),
-            //     ),
-            //     gradient: LinearGradient(
-            //       colors: [
-            //         Color(0xff886ff2),
-            //         Color(0xff6849ef),
-            //       ],
-            //       begin: Alignment.topLeft,
-            //       end: Alignment.bottomRight,
-            //     ),
-            //   ),
-            //   child: Column(
-            //     children: [
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             'Welcome home, \n THANG NGUYEN',
-            //             style: Theme.of(context).textTheme.titleLarge,
-            //           ),
-            //           Icon(
-            //             Icons.account_circle,
-            //             size: 45,
-            //             color: Colors.grey[800],
-            //           )
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-
-            // const SizedBox(height: 30),
-
-            // smart devices grid
-            // Padding(
-            //   padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-            //   child: Text(
-            //     "Smart Devices",
-            //     style: TextStyle(
-            //       fontWeight: FontWeight.bold,
-            //       fontSize: 20,
-            //       color: Colors.grey.shade800,
-            //     ),
-            //   ),
-            // ),
             const SizedBox(height: 10),
 
             // grid
-
-            // Scrollbar(
-            //   child: SizedBox(
-            //     height: 492,
-            //     child: ListView(
-            //       physics: const BouncingScrollPhysics(),
-            // children: [
             Expanded(
               child: Scrollbar(
                 child: SingleChildScrollView(
@@ -322,10 +177,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

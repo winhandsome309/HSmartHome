@@ -315,14 +315,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 50),
 
                   // Sign in button
-                  // MyButton(
-                  // onTap: signUserIn,
-                  //   onTap: () async {
-                  //     if (_key.currentState!.validate()) {
-                  //       await signUserIn();
-                  //     }
-                  //   },
-                  // ),
                   GestureDetector(
                     onTap: () async {
                       if (_key.currentState!.validate()) {

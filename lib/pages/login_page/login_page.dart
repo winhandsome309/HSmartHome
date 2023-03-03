@@ -277,11 +277,6 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () => AuthService().signInWithFacebook(),
                         imagePath: 'lib/images/icon_facebook.png',
                       ),
-                      // const SizedBox(width: 25),
-                      // SquareTile(
-                      //   onTap: () {},
-                      //   imagePath: 'lib/images/icon_twitter.png',
-                      // ),
                     ],
                   ),
 
