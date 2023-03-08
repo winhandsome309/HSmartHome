@@ -84,8 +84,8 @@ dependencies:
 
   # Visualization
   percent_indicator: ^4.2.2
-  
 
+  proste_bezier_curve: ^2.0.2
 
 
 dev_dependencies:

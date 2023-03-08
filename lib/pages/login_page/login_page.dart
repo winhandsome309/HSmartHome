@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/pages/login_page/auth_page.dart';
 import 'package:hsmarthome/pages/login_page/register_page.dart';
 import 'package:hsmarthome/service/auth_service.dart';
 import 'dart:async';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
+import 'package:proste_bezier_curve/proste_bezier_curve.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,6 +16,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  Path getClip(Size size) {
+    Path path = Path();
+
+    path.lineTo(0, 0);
+    path.lineTo(0, size.height - 50);
+    path.quadraticBezierTo(
+        size.width / 2, size.height, size.width, size.height - 50);
+    path.lineTo(size.width, 0);
+    path.lineTo(0, 0);
+    return path;
+  }
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -75,9 +89,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // x.streamInit();
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      // backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Form(
           key: _key,
@@ -86,76 +99,100 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   // Logo
-                  const SizedBox(height: 50),
+                  // const SizedBox(height: 50),
 
-                  const Icon(
-                    Icons.house,
-                    size: 100,
-                    color: Colors.pink,
-                  ),
+                  // const Icon(
+                  //   Icons.house,
+                  //   size: 100,
+                  //   color: Colors.pink,
+                  // ),
 
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 130),
 
                   // Hello again! Welcome back you've been missed
-                  const Text(
-                    'Hello Again!',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
+                  Text(
+                    'Sign In',
+                    style: GoogleFonts.lexendDeca(
+                      fontSize: 40,
+                      color: Color.fromRGBO(34, 73, 87, 1),
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    'Welcome back, you\'ve been missed!',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
+                  // const Text(
+                  //   'Welcome back, you\'ve been missed!',
+                  //   style: TextStyle(
+                  //     fontSize: 20,
+                  //   ),
+                  // ),
 
                   const SizedBox(height: 50),
 
                   // Username textfield
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: TextFormField(
-                      validator: validateEmail,
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                  Container(
+                    // padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                      child: TextFormField(
+                        style: GoogleFonts.lexendDeca(
+                          fontSize: 15,
+                          color: Colors.white,
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        validator: validateEmail,
+                        decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromRGBO(34, 73, 87, 1)),
+                          ),
+                          fillColor: const Color.fromRGBO(34, 73, 87, 1),
+                          filled: true,
+                          hintText: 'Email',
+                          hintStyle: GoogleFonts.lexendDeca(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+
+                          // prefixIcon: const Icon(Icons.mail),
                         ),
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        hintText: 'Email',
-                        prefixIcon: const Icon(Icons.mail),
+                        controller: emailController,
+                        obscureText: false,
                       ),
-                      controller: emailController,
-                      obscureText: false,
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
 
                   // Password textfield
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: TextFormField(
+                      style: GoogleFonts.lexendDeca(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
                       validator: validatePassword,
                       decoration: InputDecoration(
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey.shade400),
                         ),
-                        fillColor: Colors.grey.shade200,
+                        fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
                         hintText: 'Password',
-                        prefixIcon: const Icon(Icons.key),
+                        hintStyle: GoogleFonts.lexendDeca(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                        // prefixIcon: const Icon(Icons.key),
                         suffixIcon: IconButton(
-                          color: Colors.black,
+                          color: Colors.white,
                           icon: Icon(_passwordVisible
                               ? Icons.visibility
                               : Icons.visibility_off),
@@ -177,13 +214,16 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Forgot password?
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         Text(
                           'Forgot Password?',
-                          style: TextStyle(color: Color(0xFF858585)),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     ),
@@ -203,17 +243,19 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(25),
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 35),
                       decoration: BoxDecoration(
-                        color: (enabled ? Colors.grey : Colors.black),
-                        borderRadius: BorderRadius.circular(8),
+                        color: (enabled
+                            ? Color.fromRGBO(32, 223, 127, 1).withOpacity(0.4)
+                            : Color.fromRGBO(32, 223, 127, 1)),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
                           'Sign In',
-                          style: TextStyle(
-                            color: Colors.white,
+                          style: GoogleFonts.lexendDeca(
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),
@@ -236,26 +278,29 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Or continue with
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: Row(
                       children: [
-                        Expanded(
+                        const Expanded(
                           child: Divider(
                             thickness: 0.5,
-                            color: Colors.grey.shade400,
+                            color: Color.fromRGBO(9, 53, 69, 1),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             'Or continue with',
-                            style: TextStyle(color: Colors.grey.shade700),
+                            style: GoogleFonts.montserrat(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           child: Divider(
                             thickness: 0.5,
-                            color: Colors.grey.shade400,
+                            color: Color.fromRGBO(9, 53, 69, 1),
                           ),
                         ),
                       ],
@@ -288,7 +333,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Text(
                         'Don\'t have an account?',
-                        style: TextStyle(color: Colors.grey.shade700),
+                        style: GoogleFonts.montserrat(
+                          color: Colors.black,
+                          fontSize: 14,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       GestureDetector(
@@ -299,12 +347,76 @@ class _LoginPageState extends State<LoginPage> {
                                 builder: (context) => const RegisterPage()),
                           ),
                         },
-                        child: const Text(
+                        child: Text(
                           'Register now',
-                          style: TextStyle(
-                            color: Colors.blue,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 14,
+                            color: Color.fromRGBO(0, 129, 249, 1),
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 50),
+                  // ClipPath(
+                  //   clipper: ProsteBezierCurve(
+                  //     position: ClipPosition.bottom,
+                  //     list: [
+                  //       BezierCurveSection(
+                  //         start: Offset(0, 150),
+                  //         top: Offset(300 / 2, 200),
+                  //         end: Offset(300, 150),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Container(
+                  //     height: 200,
+                  //     color: Colors.red,
+                  //   ),
+                  // ),
+                  Stack(
+                    children: [
+                      ClipPath(
+                        clipper: ProsteBezierCurve(
+                          position: ClipPosition.top,
+                          list: [
+                            BezierCurveSection(
+                              start: Offset(screenWidth, 30),
+                              top: Offset(screenWidth / 4 * 3, 40),
+                              end: Offset(screenWidth / 2, 20),
+                            ),
+                            BezierCurveSection(
+                              start: Offset(screenWidth / 2, 0),
+                              top: Offset(screenWidth / 4, 0),
+                              end: Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          height: 80,
+                          color: Color.fromRGBO(32, 223, 127, 0.8),
+                        ),
+                      ),
+                      ClipPath(
+                        clipper: ProsteBezierCurve(
+                          position: ClipPosition.top,
+                          list: [
+                            BezierCurveSection(
+                              start: Offset(screenWidth, 30),
+                              top: Offset(screenWidth / 4 * 3, 0),
+                              end: Offset(screenWidth / 2, 30),
+                            ),
+                            BezierCurveSection(
+                              start: Offset(screenWidth / 2, 30),
+                              top: Offset(screenWidth / 4, 60),
+                              end: Offset(0, 0),
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          color: Color.fromRGBO(34, 73, 87, 0.8),
+                          height: 80,
                         ),
                       ),
                     ],

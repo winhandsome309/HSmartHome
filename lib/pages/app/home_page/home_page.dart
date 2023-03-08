@@ -152,7 +152,8 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Scrollbar(
                 child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
                   // children: [
                   child: GridView.builder(
                     itemCount: 5,

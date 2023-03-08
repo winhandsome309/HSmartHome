@@ -53,7 +53,7 @@ class DashboardState extends State<Dashboard> {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Icon(Icons.arrow_back_ios_rounded),
                   Text('This week'),
                   Icon(Icons.arrow_forward_ios_rounded),
@@ -90,31 +90,9 @@ class DashboardState extends State<Dashboard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          SizedBox(
+                          const SizedBox(
                             height: 80,
                           ),
-                          // const Text(
-                          //   'Mingguan',
-                          //   style: TextStyle(
-                          //     color: AppColors.contentColorGreen,
-                          //     fontSize: 24,
-                          //     fontWeight: FontWeight.bold,
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   height: 4,
-                          // ),
-                          // Text(
-                          //   'Grafik konsumsi kalori',
-                          //   style: TextStyle(
-                          //     color: AppColors.contentColorGreen.darken(),
-                          //     fontSize: 18,
-                          //     fontWeight: FontWeight.bold,
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   height: 38,
-                          // ),
                           Expanded(
                             child: Padding(
                               padding:
@@ -128,26 +106,6 @@ class DashboardState extends State<Dashboard> {
                         ],
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8),
-                    //   child: Align(
-                    //     alignment: Alignment.topRight,
-                    //     child: IconButton(
-                    //       icon: Icon(
-                    //         isPlaying ? Icons.pause : Icons.play_arrow,
-                    //         color: AppColors.contentColorGreen,
-                    //       ),
-                    //       onPressed: () {
-                    //         setState(() {
-                    //           isPlaying = !isPlaying;
-                    //           if (isPlaying) {
-                    //             refreshState();
-                    //           }
-                    //         });
-                    //       },
-                    //     ),
-                    //   ),
-                    // )
                   ],
                 ),
               ),
@@ -172,6 +130,10 @@ class DashboardState extends State<Dashboard> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
+              // child: Expanded(
+              //   child: Scrollbar(
+              //     child: SingleChildScrollView(
+              //       child: ListView(
               child: Column(
                 children: [
                   Column(
@@ -228,6 +190,9 @@ class DashboardState extends State<Dashboard> {
                   ),
                 ],
               ),
+              // ),
+              // ),
+              // ),
             ),
           ],
         ),

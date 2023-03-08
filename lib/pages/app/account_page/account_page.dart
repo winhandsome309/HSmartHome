@@ -86,10 +86,11 @@ class _AccountPageState extends State<AccountPage> {
               const SizedBox(height: 30),
               SizedBox(
                 // height: 380,
-                height: 580,
+                height: 550,
                 child: Scrollbar(
                   child: ListView(
-                    physics: const BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
                     children: [
                       GestureDetector(
                         onTap: () {},
@@ -168,22 +169,22 @@ class _AccountPageState extends State<AccountPage> {
                         varicolor: const Color.fromRGBO(122, 115, 115, 1),
                         onTap: () => {singUserOut()},
                       ),
-                      const SizedBox(height: 20),
-                      Options(
-                        iconRow: Icons.logout,
-                        s: 'Update',
-                        k: 229,
-                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
-                        onTap: () => {singUserOut()},
-                      ),
-                      const SizedBox(height: 20),
-                      Options(
-                        iconRow: Icons.help_center,
-                        s: 'Help',
-                        k: 248,
-                        varicolor: const Color.fromRGBO(122, 115, 115, 1),
-                        onTap: () {},
-                      ),
+                      // const SizedBox(height: 20),
+                      // Options(
+                      //   iconRow: Icons.logout,
+                      //   s: 'Update',
+                      //   k: 229,
+                      //   varicolor: const Color.fromRGBO(122, 115, 115, 1),
+                      //   onTap: () => {singUserOut()},
+                      // ),
+                      // const SizedBox(height: 20),
+                      // Options(
+                      //   iconRow: Icons.help_center,
+                      //   s: 'Help',
+                      //   k: 248,
+                      //   varicolor: const Color.fromRGBO(122, 115, 115, 1),
+                      //   onTap: () {},
+                      // ),
                       const SizedBox(height: 20),
                       Options(
                         iconRow: Icons.logout,
