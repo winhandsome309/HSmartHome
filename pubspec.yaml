@@ -72,7 +72,7 @@ dependencies:
 
   # Chart
   fl_chart: ^0.61.0
-  flutter_svg: ^2.0.2
+  # flutter_svg: ^2.0.2
   flutter_staggered_grid_view: ^0.6.2
   dartx: ^1.1.0
   go_router: ^6.2.0
@@ -86,6 +86,22 @@ dependencies:
   percent_indicator: ^4.2.2
 
   proste_bezier_curve: ^2.0.2
+
+  awesome_snackbar_content: ^0.1.2
+
+  flutter_slidable: ^2.0.0
+
+  # Slider circle
+  sleek_circular_slider: ^2.0.1
+
+  # Animated icon
+  animate_icons: ^2.0.0
+
+  # Color picker
+  flutter_colorpicker: ^1.0.3
+  flutter_material_color_picker: ^1.1.0+2
+
+  rxdart: ^0.27.7
 
 
 dev_dependencies:

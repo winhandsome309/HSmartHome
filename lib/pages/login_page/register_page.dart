@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hsmarthome/pages/login_page/login_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -83,17 +84,23 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(message, style: const TextStyle(color: Colors.white)),
-          ),
-        );
-      },
+    if (message == 'email-already-in-use') message = 'Email already in use';
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'On Snap!',
+        message: message,
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
     );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   void registerSuccessfull() {
@@ -172,21 +179,21 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   // Logo
 
-                  const SizedBox(height: 130),
+                  const SizedBox(height: 180),
 
                   // Hello again! Welcome back you've been missed
                   Text(
                     'Sign Up',
                     style: GoogleFonts.lexendDeca(
                       fontSize: 40,
-                      color: Color.fromRGBO(34, 73, 87, 1),
+                      color: const Color.fromRGBO(34, 73, 87, 1),
                     ),
                   ),
                   const SizedBox(height: 50),
 
                   // Username textfield
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: TextFormField(
                       style: GoogleFonts.lexendDeca(
                         fontSize: 15,
@@ -197,8 +204,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
@@ -214,11 +223,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
 
                   // Email textfield
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: TextFormField(
                       style: GoogleFonts.lexendDeca(
                         fontSize: 15,
@@ -230,8 +239,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
@@ -247,11 +258,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
 
                   // Password textfield
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: TextFormField(
                       style: GoogleFonts.lexendDeca(
                         fontSize: 15,
@@ -263,8 +274,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
@@ -293,11 +306,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
 
                   // Confirm password.
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
                     child: TextFormField(
                       style: GoogleFonts.lexendDeca(
                         fontSize: 15,
@@ -308,8 +321,10 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
@@ -338,7 +353,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
 
                   // Sign in button
                   GestureDetector(
@@ -352,8 +367,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(25),
-                      margin: const EdgeInsets.symmetric(horizontal: 25),
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 35),
                       decoration: BoxDecoration(
                         color: (enabled
                             ? Color.fromRGBO(32, 223, 127, 1).withOpacity(0.4)
@@ -414,7 +429,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 40),
                   Stack(
                     children: [
                       ClipPath(
@@ -429,13 +444,13 @@ class _RegisterPageState extends State<RegisterPage> {
                             BezierCurveSection(
                               start: Offset(screenWidth / 2, 0),
                               top: Offset(screenWidth / 4, 0),
-                              end: Offset(0, 0),
+                              end: const Offset(0, 0),
                             ),
                           ],
                         ),
                         child: Container(
                           height: 80,
-                          color: Color.fromRGBO(32, 223, 127, 0.8),
+                          color: const Color.fromRGBO(32, 223, 127, 0.8),
                         ),
                       ),
                       ClipPath(
@@ -450,12 +465,12 @@ class _RegisterPageState extends State<RegisterPage> {
                             BezierCurveSection(
                               start: Offset(screenWidth / 2, 30),
                               top: Offset(screenWidth / 4, 60),
-                              end: Offset(0, 0),
+                              end: const Offset(0, 0),
                             ),
                           ],
                         ),
                         child: Container(
-                          color: Color.fromRGBO(34, 73, 87, 0.8),
+                          color: const Color.fromRGBO(34, 73, 87, 0.8),
                           height: 80,
                         ),
                       ),

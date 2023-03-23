@@ -7,6 +7,7 @@ import 'package:hsmarthome/service/auth_service.dart';
 import 'dart:async';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -67,17 +68,24 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.deepPurple,
-          title: Center(
-            child: Text(message, style: const TextStyle(color: Colors.white)),
-          ),
-        );
-      },
+    if (message == 'user-not-found') message = 'User not found';
+    if (message == 'wrong-password') message = 'Wrong password';
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'On Snap!',
+        message: message,
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
     );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
   }
 
   HomeController x = HomeController();
@@ -98,73 +106,55 @@ class _LoginPageState extends State<LoginPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // Logo
-                  // const SizedBox(height: 50),
-
-                  // const Icon(
-                  //   Icons.house,
-                  //   size: 100,
-                  //   color: Colors.pink,
-                  // ),
-
-                  const SizedBox(height: 130),
-
-                  // Hello again! Welcome back you've been missed
+                  const SizedBox(height: 180),
                   Text(
                     'Sign In',
                     style: GoogleFonts.lexendDeca(
                       fontSize: 40,
-                      color: Color.fromRGBO(34, 73, 87, 1),
+                      color: const Color.fromRGBO(34, 73, 87, 1),
+
                       // fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // const Text(
-                  //   'Welcome back, you\'ve been missed!',
-                  //   style: TextStyle(
-                  //     fontSize: 20,
-                  //   ),
-                  // ),
 
                   const SizedBox(height: 50),
 
                   // Username textfield
-                  Container(
-                    // padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                      child: TextFormField(
-                        style: GoogleFonts.lexendDeca(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 35.0),
+                    child: TextFormField(
+                      style: GoogleFonts.lexendDeca(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                      validator: validateEmail,
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          // borderSide:
+                          // BorderSide(color: Color.fromRGBO(34, 73, 87, 1)),
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        fillColor: const Color.fromRGBO(34, 73, 87, 1),
+                        filled: true,
+                        hintText: 'Email',
+                        hintStyle: GoogleFonts.lexendDeca(
                           fontSize: 15,
                           color: Colors.white,
                         ),
-                        validator: validateEmail,
-                        decoration: InputDecoration(
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromRGBO(34, 73, 87, 1)),
-                          ),
-                          fillColor: const Color.fromRGBO(34, 73, 87, 1),
-                          filled: true,
-                          hintText: 'Email',
-                          hintStyle: GoogleFonts.lexendDeca(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-
-                          // prefixIcon: const Icon(Icons.mail),
-                        ),
-                        controller: emailController,
-                        obscureText: false,
                       ),
+                      controller: emailController,
+                      obscureText: false,
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 10),
 
                   // Password textfield
                   Padding(
@@ -180,8 +170,10 @@ class _LoginPageState extends State<LoginPage> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(32, 223, 127, 1)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         fillColor: const Color.fromRGBO(34, 73, 87, 1),
                         filled: true,
@@ -210,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 25.0),
+                  const SizedBox(height: 10.0),
 
                   // Forgot password?
                   Padding(
@@ -247,8 +239,9 @@ class _LoginPageState extends State<LoginPage> {
                       margin: const EdgeInsets.symmetric(horizontal: 35),
                       decoration: BoxDecoration(
                         color: (enabled
-                            ? Color.fromRGBO(32, 223, 127, 1).withOpacity(0.4)
-                            : Color.fromRGBO(32, 223, 127, 1)),
+                            ? const Color.fromRGBO(32, 223, 127, 1)
+                                .withOpacity(0.4)
+                            : const Color.fromRGBO(32, 223, 127, 1)),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(
@@ -293,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                             'Or continue with',
                             style: GoogleFonts.montserrat(
                               color: Colors.black,
-                              fontSize: 14,
+                              fontSize: 13,
                             ),
                           ),
                         ),
@@ -307,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
 
                   // Google + Facebook + Twitter
                   Row(
@@ -317,7 +310,7 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () => AuthService().signInWithGoogle(),
                         imagePath: 'lib/images/icon_google.png',
                       ),
-                      const SizedBox(width: 25),
+                      const SizedBox(width: 20),
                       SquareTile(
                         onTap: () => AuthService().signInWithFacebook(),
                         imagePath: 'lib/images/icon_facebook.png',
@@ -325,7 +318,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 20),
 
                   // Not a member? Register now
                   Row(
@@ -351,7 +344,7 @@ class _LoginPageState extends State<LoginPage> {
                           'Register now',
                           style: GoogleFonts.montserrat(
                             fontSize: 14,
-                            color: Color.fromRGBO(0, 129, 249, 1),
+                            color: const Color.fromRGBO(0, 129, 249, 1),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -359,22 +352,6 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 50),
-                  // ClipPath(
-                  //   clipper: ProsteBezierCurve(
-                  //     position: ClipPosition.bottom,
-                  //     list: [
-                  //       BezierCurveSection(
-                  //         start: Offset(0, 150),
-                  //         top: Offset(300 / 2, 200),
-                  //         end: Offset(300, 150),
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: Container(
-                  //     height: 200,
-                  //     color: Colors.red,
-                  //   ),
-                  // ),
                   Stack(
                     children: [
                       ClipPath(
@@ -389,13 +366,13 @@ class _LoginPageState extends State<LoginPage> {
                             BezierCurveSection(
                               start: Offset(screenWidth / 2, 0),
                               top: Offset(screenWidth / 4, 0),
-                              end: Offset(0, 0),
+                              end: const Offset(0, 0),
                             ),
                           ],
                         ),
                         child: Container(
                           height: 80,
-                          color: Color.fromRGBO(32, 223, 127, 0.8),
+                          color: const Color.fromRGBO(32, 223, 127, 0.8),
                         ),
                       ),
                       ClipPath(
@@ -410,12 +387,12 @@ class _LoginPageState extends State<LoginPage> {
                             BezierCurveSection(
                               start: Offset(screenWidth / 2, 30),
                               top: Offset(screenWidth / 4, 60),
-                              end: Offset(0, 0),
+                              end: const Offset(0, 0),
                             ),
                           ],
                         ),
                         child: Container(
-                          color: Color.fromRGBO(34, 73, 87, 0.8),
+                          color: const Color.fromRGBO(34, 73, 87, 0.8),
                           height: 80,
                         ),
                       ),
@@ -453,7 +430,7 @@ class SquareTile extends StatelessWidget {
         ),
         child: Image.asset(
           imagePath,
-          height: 50,
+          height: 45,
         ),
       ),
     );

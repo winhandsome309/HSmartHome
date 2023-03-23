@@ -1,100 +1,285 @@
 // import 'package:flutter/material.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:hsmarthome/util/smart_device_box.dart';
+
+// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:hsmarthome/data/provider/tempHumidAPI.dart';
 import 'package:hsmarthome/data/models/adafruit_get.dart';
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:hsmarthome/pages/app/home_page/home_page.dart';
+// import 'package:hsmarthome/pages/app/home_page/home_page.dart';
+import 'package:rxdart/rxdart.dart';
 
 class HomeController extends GetxController {
   // padding constants
   final double horizontalPadding = 30;
   final double verticalPadding = 25;
 
-  RxInt _currentIndex = 0.obs;
+  final RxInt _currentIndex = 0.obs;
   get currentIndex => _currentIndex.value;
 
-  late StreamController<AdafruitGET> ledStream;
+  late StreamController<AdafruitGET> alarmStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> doorStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> fanStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> gasStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> gasAlarmStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> ledStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> lightStream =
+      StreamController<AdafruitGET>.broadcast();
+  late StreamController<AdafruitGET> lightLedStream =
+      StreamController.broadcast();
+  late StreamController<AdafruitGET> tempStream = StreamController.broadcast();
+  late StreamController<AdafruitGET> tempFanStream =
+      StreamController.broadcast();
 
-  static bool ledToggled = false;
+  static String noti = "";
+  static String password = "";
+  static double fanSpeed = 0.0;
+  static double gasValue = 0.0;
+  static String gasAlarm = "";
+  static RxString ledValue = "0x000000".obs;
+  static double lightValue = 0.0;
+  static String lightLed = "";
+  static double tempValue = 0.0;
+  static String tempFan = "";
 
-  HomePage a = new HomePage();
-
-  // bool funct() {
-  //   initialStateLed();
-  //   return ledToggled;
-  // }
-
-  // Future initialStateLed() async {
-  //   ledStream = StreamController();
-  //   var data = await TempHumidAPI.getLed1Data();
-  //   var value = int.parse(data.lastValue!);
-  //   if (value == 1) {
-  //     ledToggled = true;
-  //   } else if (value == 0) {
-  //     ledToggled = false;
-  //   }
-  //   AdafruitGET led = await TempHumidAPI.getLed1Data();
-  //   print(led.lastValue);
-  //   ledStream.add(led);
-  // }
-
-  // setCurrentIndex(int index) {
-  //   _currentIndex.value = index;
-  //   if (index == 1 || index == 2) {
-  //     ledStream.close();
-  //   } else if (index == 0) {
-  //     streamInit();
-  //   }
-  // }
+  // static List<bool> isToggled = [false, false, false, false];
 
   onSwitched(int index) {
-    ledToggled = !ledToggled;
     if (index == 0) {
-      var value = ledToggled ? "1" : "0";
-      TempHumidAPI.updateLed1Data(value);
+      if (ledValue == '0x000000'.obs) {
+        ledControl('0xffffff'.obs);
+      } else {
+        ledControl('0x000000'.obs);
+      }
+    } else if (index == 1) {
+      if (fanSpeed != 0) {
+        fanControl(0);
+      } else {
+        fanControl(50);
+      }
+    } else if (index == 2) {
+      if (gasAlarm == 'OFF') {
+        gasAlarmControl("ON");
+      } else {
+        gasAlarmControl("OFF");
+      }
+    } else if (index == 3) {
+      if (password == 'OFF') {
+        passControl("ON");
+      } else {
+        passControl("OFF");
+      }
     }
   }
 
+  passControl(String value) async {
+    if (value.length == 6) password = value;
+    if (value == "OFF") password = 'OFF';
+    TempHumidAPI.updateDoorData(value);
+    if (value == 'ON') {
+      AdafruitGET pass = await TempHumidAPI.getDoorData();
+      password = pass.lastValue!;
+    }
+  }
+
+  fanControl(double value) {
+    fanSpeed = value;
+    var k = value.round();
+    TempHumidAPI.updateFanData(k.toString());
+  }
+
+  gasAlarmControl(String value) {
+    gasAlarm = value;
+    TempHumidAPI.updateGasAlarmData(value);
+  }
+
+  ledControl(RxString value) {
+    ledValue = value;
+    TempHumidAPI.updateLedData(value.toString());
+  }
+
+  lightLedControl(String value) {
+    lightLed = value;
+    TempHumidAPI.updateLightLedData(value);
+  }
+
+  tempFanControl(String value) {
+    tempFan = value;
+    TempHumidAPI.updateTempFanData(value);
+  }
+
+  // fanSpeedControl(double valueChange) {
+  //   fanSpeed = valueChange;
+  //   TempHumidAPI.updateFanSpeedData(valueChange.toString());
+  // }
+
   retreveSensorData() async {
-    // AdafruitGET humidity data fetch
-    AdafruitGET led = await TempHumidAPI.getLed1Data();
-    print(led.lastValue);
-    ledStream.add(led);
+    // AdafruitGET led = await TempHumidAPI.getLedData();
+    // AdafruitGET ledColor = await TempHumidAPI.getLedColorData();
+    // AdafruitGET fanSwitch = await TempHumidAPI.getFanSwitchData();
+    // AdafruitGET fanSpeed = await TempHumidAPI.getFanSpeedData();
+    // AdafruitGET pass = await TempHumidAPI.getPassData();
+    // print(led.lastValue);
+    // ledStream.add(led);
+    // ledColorStream.add(ledColor);
+    // fanSwitchStream.add(fanSwitch);
+    // fanSpeedStream.add(fanSpeed);
+    // passStream.add(pass);
+    AdafruitGET alarm = await TempHumidAPI.getAlarmData();
+    AdafruitGET light = await TempHumidAPI.getLightData();
+    AdafruitGET temp = await TempHumidAPI.getTempData();
+    AdafruitGET gas = await TempHumidAPI.getGasData();
+    noti = alarm.lastValue!;
+    lightValue = double.parse(light.lastValue!);
+    tempValue = double.parse(temp.lastValue!);
+    gasValue = double.parse(gas.lastValue!);
+    alarmStream.add(alarm);
+    lightStream.add(light);
+    tempStream.add(temp);
+    gasStream.add(gas);
   }
 
   getSmartSystemStatus() async {
-    var data = await TempHumidAPI.getLed1Data();
-    var value = int.parse(data.lastValue!);
-    print('Hello$value');
-    if (value == 1) {
-      ledToggled = true;
-    } else if (value == 0) {
-      ledToggled = false;
-    }
+    var fanSpeedData = await TempHumidAPI.getFanData();
+    var doorData = await TempHumidAPI.getDoorData();
+    var gasAlarmData = await TempHumidAPI.getGasAlarmData();
+    var ledData = await TempHumidAPI.getLedData();
+    var lightLedData = await TempHumidAPI.getLightLedData();
+    var tempFanData = await TempHumidAPI.getTempFanData();
+
+    fanSpeed = double.parse(fanSpeedData.lastValue!);
+    password = doorData.lastValue!;
+    gasAlarm = gasAlarmData.lastValue!;
+    ledValue.value = ledData.lastValue!;
+    lightLed = lightLedData.lastValue!;
+    tempFan = tempFanData.lastValue!;
+
+    // var valueLed = int.parse(ledData.lastValue!);
+    // led.value = ledData.lastValue!;
+
+    // var valueFanSwitch = int.parse(fanSwitchData.lastValue!);
+    // var valueFanSpeed = double.parse(fanSpeedData.lastValue!);
+    // var valueAlarm = int.parse(alarmData.lastValue!);
+    // var valueDoor = int.parse(doorData.lastValue!);
+    // var valuePass = passData.lastValue!;
+
+    // if (valueLed == 1) {
+    //   isToggled[0] = true;
+    // } else if (valueLed == 0) {
+    //   isToggled[0] = false;
+    // }
+    // if (valueFanSwitch == 1) {
+    //   isToggled[1] = true;
+    // } else if (valueFanSwitch == 0) {
+    //   isToggled[1] = false;
+    // }
+    // if (valueAlarm == 1) {
+    //   isToggled[2] = true;
+    // } else if (valueAlarm == 0) {
+    //   isToggled[2] = false;
+    // }
+    // if (valueDoor == 1) {
+    //   isToggled[3] = true;
+    // } else if (valueDoor == 0) {
+    //   isToggled[3] = false;
+    // }
+
+    // fanSpeed = valueFanSpeed;
+    // password = valuePass;
   }
 
   streamInit() {
-    ledStream = StreamController();
+    // tempStream = StreamController.broadcast();
+    // gasStream = StreamController.broadcast();
+    // ledStream = StreamController.broadcast();
+    // ledColorStream = StreamController.broadcast();
+    // fanSwitchStream = StreamController.broadcast();
+    // fanSpeedStream = StreamController.broadcast();
+    // passStream = StreamController.broadcast();
+    alarmStream = BehaviorSubject();
+    doorStream = BehaviorSubject();
+    fanStream = BehaviorSubject();
+    gasStream = BehaviorSubject();
+    gasAlarmStream = BehaviorSubject();
+    ledStream = BehaviorSubject();
+    lightStream = BehaviorSubject();
+    lightLedStream = BehaviorSubject();
+    tempStream = BehaviorSubject();
+    tempFanStream = BehaviorSubject();
+
+    // tempStream = BehaviorSubject();
+    // gasStream = BehaviorSubject();
+    // ledStream = BehaviorSubject();
+    // ledColorStream = BehaviorSubject();
+    // fanSwitchStream = BehaviorSubject();
+    // fanSpeedStream = BehaviorSubject();
+    // alarmStream = BehaviorSubject();
+    // doorStream = BehaviorSubject();
+    // passStream = BehaviorSubject();
+    // getSmartSystemStatus();
+    // retreveSensorData();
     getSmartSystemStatus();
-    retreveSensorData();
+    Timer.periodic(
+      const Duration(seconds: 3),
+      (_) {
+        // getSmartSystemStatus();
+        retreveSensorData();
+      },
+    );
+  }
+
+  @override
+  void onInit() {
+    streamInit();
+    super.onInit();
   }
 
   // @override
-  // void onInit() {
-  //   streamInit();
-  //   super.onInit();
+  // void dispose() {
+  // tempStream.close();
+  // gasStream.close();
+  // ledStream.close();
+  // ledColorStream.close();
+  // fanSwitchStream.close();
+  // fanSpeedStream.close();
+  // passStream.close();
+  //   super.dispose();
   // }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  // }
+  @override
+  void onReady() {
+    super.onReady();
+  }
 
-  // @override
-  // void onClose() {
-  //   super.onClose();
-  //   ledStream.close();
-  // }
+  @override
+  void onClose() {
+    // tempStream.close();
+    // gasStream.close();
+    // ledStream.close();
+    // ledColorStream.close();
+    // fanSwitchStream.close();
+    // fanSpeedStream.close();
+    // alarmStream.close();
+    // doorStream.close();
+    // passStream.close();
+    alarmStream.close();
+    doorStream.close();
+    fanStream.close();
+    gasStream.close();
+    gasAlarmStream.close();
+    ledStream.close();
+    lightStream.close();
+    lightLedStream.close();
+    tempStream.close();
+    tempFanStream.close();
+    super.onClose();
+  }
 }

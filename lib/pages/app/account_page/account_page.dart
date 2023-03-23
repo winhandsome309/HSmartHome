@@ -73,7 +73,7 @@ class _AccountPageState extends State<AccountPage> {
                             "My Account",
                             style: GoogleFonts.lexendDeca(
                               fontSize: 23,
-                              color: Color.fromRGBO(72, 72, 74, 1),
+                              color: const Color.fromRGBO(72, 72, 74, 1),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -100,7 +100,7 @@ class _AccountPageState extends State<AccountPage> {
                           margin: const EdgeInsets.symmetric(horizontal: 25),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: Row(
                             children: [
@@ -159,7 +159,7 @@ class _AccountPageState extends State<AccountPage> {
                         s: 'User guide',
                         k: 202,
                         varicolor: const Color.fromRGBO(122, 115, 115, 1),
-                        onTap: () => {singUserOut()},
+                        onTap: () {},
                       ),
                       const SizedBox(height: 20),
                       Options(
@@ -167,7 +167,7 @@ class _AccountPageState extends State<AccountPage> {
                         s: 'Frequently asked questions',
                         k: 76,
                         varicolor: const Color.fromRGBO(122, 115, 115, 1),
-                        onTap: () => {singUserOut()},
+                        onTap: () {},
                       ),
                       // const SizedBox(height: 20),
                       // Options(
@@ -302,20 +302,21 @@ class Options extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
           children: [
             const SizedBox(width: 15),
             Text(s,
-                style: TextStyle(
+                style: GoogleFonts.lexendDeca(
                   color: varicolor,
-                  fontSize: 17,
+                  fontSize: 15,
                 )),
-            SizedBox(width: k),
+            const Spacer(),
             Icon(
               Icons.arrow_forward_ios,
               color: varicolor,
+              size: 18,
             ),
           ],
         ),
