@@ -4,7 +4,7 @@
 
 // import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:hsmarthome/data/provider/tempHumidAPI.dart';
+import 'package:hsmarthome/data/provider/getDataAPI.dart';
 import 'package:hsmarthome/data/models/adafruit_get.dart';
 import 'dart:async';
 import 'package:get/get.dart';
@@ -83,9 +83,9 @@ class HomeController extends GetxController {
   passControl(String value) async {
     if (value.length == 6) password = value;
     if (value == "OFF") password = 'OFF';
-    TempHumidAPI.updateDoorData(value);
+    getDataAPI.updateDoorData(value);
     if (value == 'ON') {
-      AdafruitGET pass = await TempHumidAPI.getDoorData();
+      AdafruitGET pass = await getDataAPI.getDoorData();
       password = pass.lastValue!;
     }
   }
@@ -93,50 +93,50 @@ class HomeController extends GetxController {
   fanControl(double value) {
     fanSpeed = value;
     var k = value.round();
-    TempHumidAPI.updateFanData(k.toString());
+    getDataAPI.updateFanData(k.toString());
   }
 
   gasAlarmControl(String value) {
     gasAlarm = value;
-    TempHumidAPI.updateGasAlarmData(value);
+    getDataAPI.updateGasAlarmData(value);
   }
 
   ledControl(RxString value) {
     ledValue = value;
-    TempHumidAPI.updateLedData(value.toString());
+    getDataAPI.updateLedData(value.toString());
   }
 
   lightLedControl(String value) {
     lightLed = value;
-    TempHumidAPI.updateLightLedData(value);
+    getDataAPI.updateLightLedData(value);
   }
 
   tempFanControl(String value) {
     tempFan = value;
-    TempHumidAPI.updateTempFanData(value);
+    getDataAPI.updateTempFanData(value);
   }
 
   // fanSpeedControl(double valueChange) {
   //   fanSpeed = valueChange;
-  //   TempHumidAPI.updateFanSpeedData(valueChange.toString());
+  //   getDataAPI.updateFanSpeedData(valueChange.toString());
   // }
 
   retreveSensorData() async {
-    // AdafruitGET led = await TempHumidAPI.getLedData();
-    // AdafruitGET ledColor = await TempHumidAPI.getLedColorData();
-    // AdafruitGET fanSwitch = await TempHumidAPI.getFanSwitchData();
-    // AdafruitGET fanSpeed = await TempHumidAPI.getFanSpeedData();
-    // AdafruitGET pass = await TempHumidAPI.getPassData();
+    // AdafruitGET led = await getDataAPI.getLedData();
+    // AdafruitGET ledColor = await getDataAPI.getLedColorData();
+    // AdafruitGET fanSwitch = await getDataAPI.getFanSwitchData();
+    // AdafruitGET fanSpeed = await getDataAPI.getFanSpeedData();
+    // AdafruitGET pass = await getDataAPI.getPassData();
     // print(led.lastValue);
     // ledStream.add(led);
     // ledColorStream.add(ledColor);
     // fanSwitchStream.add(fanSwitch);
     // fanSpeedStream.add(fanSpeed);
     // passStream.add(pass);
-    AdafruitGET alarm = await TempHumidAPI.getAlarmData();
-    AdafruitGET light = await TempHumidAPI.getLightData();
-    AdafruitGET temp = await TempHumidAPI.getTempData();
-    AdafruitGET gas = await TempHumidAPI.getGasData();
+    AdafruitGET alarm = await getDataAPI.getAlarmData();
+    AdafruitGET light = await getDataAPI.getLightData();
+    AdafruitGET temp = await getDataAPI.getTempData();
+    AdafruitGET gas = await getDataAPI.getGasData();
     noti = alarm.lastValue!;
     lightValue = double.parse(light.lastValue!);
     tempValue = double.parse(temp.lastValue!);
@@ -148,12 +148,12 @@ class HomeController extends GetxController {
   }
 
   getSmartSystemStatus() async {
-    var fanSpeedData = await TempHumidAPI.getFanData();
-    var doorData = await TempHumidAPI.getDoorData();
-    var gasAlarmData = await TempHumidAPI.getGasAlarmData();
-    var ledData = await TempHumidAPI.getLedData();
-    var lightLedData = await TempHumidAPI.getLightLedData();
-    var tempFanData = await TempHumidAPI.getTempFanData();
+    var fanSpeedData = await getDataAPI.getFanData();
+    var doorData = await getDataAPI.getDoorData();
+    var gasAlarmData = await getDataAPI.getGasAlarmData();
+    var ledData = await getDataAPI.getLedData();
+    var lightLedData = await getDataAPI.getLightLedData();
+    var tempFanData = await getDataAPI.getTempFanData();
 
     fanSpeed = double.parse(fanSpeedData.lastValue!);
     password = doorData.lastValue!;
@@ -197,13 +197,6 @@ class HomeController extends GetxController {
   }
 
   streamInit() {
-    // tempStream = StreamController.broadcast();
-    // gasStream = StreamController.broadcast();
-    // ledStream = StreamController.broadcast();
-    // ledColorStream = StreamController.broadcast();
-    // fanSwitchStream = StreamController.broadcast();
-    // fanSpeedStream = StreamController.broadcast();
-    // passStream = StreamController.broadcast();
     alarmStream = BehaviorSubject();
     doorStream = BehaviorSubject();
     fanStream = BehaviorSubject();
@@ -214,18 +207,6 @@ class HomeController extends GetxController {
     lightLedStream = BehaviorSubject();
     tempStream = BehaviorSubject();
     tempFanStream = BehaviorSubject();
-
-    // tempStream = BehaviorSubject();
-    // gasStream = BehaviorSubject();
-    // ledStream = BehaviorSubject();
-    // ledColorStream = BehaviorSubject();
-    // fanSwitchStream = BehaviorSubject();
-    // fanSpeedStream = BehaviorSubject();
-    // alarmStream = BehaviorSubject();
-    // doorStream = BehaviorSubject();
-    // passStream = BehaviorSubject();
-    // getSmartSystemStatus();
-    // retreveSensorData();
     getSmartSystemStatus();
     Timer.periodic(
       const Duration(seconds: 3),
@@ -241,18 +222,6 @@ class HomeController extends GetxController {
     streamInit();
     super.onInit();
   }
-
-  // @override
-  // void dispose() {
-  // tempStream.close();
-  // gasStream.close();
-  // ledStream.close();
-  // ledColorStream.close();
-  // fanSwitchStream.close();
-  // fanSpeedStream.close();
-  // passStream.close();
-  //   super.dispose();
-  // }
 
   @override
   void onReady() {
