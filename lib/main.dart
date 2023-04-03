@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_instance/src/bindings_interface.dart';
+// import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:hsmarthome/pages/login_page/auth_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
-import 'package:hsmarthome/modules/home_controller/home_controller.dart';
-import 'package:get/get.dart';
+// import 'package:hsmarthome/modules/home_controller/home_controller.dart';
+// import 'package:get/get.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

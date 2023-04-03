@@ -161,7 +161,8 @@ class _DoorState extends State<Door> {
                       onTap: () => {
                         if (_key.currentState!.validate())
                           {
-                            if (oldPasswordDoor.text != HomeController.password)
+                            if (oldPasswordDoor.text !=
+                                HomeController.password.substring(3))
                               {
                                 showErrorMessage('Old password does not match'),
                               }
@@ -169,7 +170,8 @@ class _DoorState extends State<Door> {
                               {
                                 Navigator.pop(context),
                                 showSuccessMessage('Successfully'),
-                                controller.passControl(newPasswordDoor.text),
+                                controller.passControl(
+                                    'CHANGE-${newPasswordDoor.text}'),
                               }
                           }
                       },
@@ -394,10 +396,16 @@ class _DoorState extends State<Door> {
                           phoneNumber.substring(0, phoneNumber.length - 1);
                     }
                     if (phoneNumber.length == 6) {
-                      if (phoneNumber == HomeController.password) {
+                      String pattern = "";
+                      if (HomeController.password.length == 9) {
+                        pattern = HomeController.password.substring(3);
+                      } else {
+                        pattern = HomeController.password.substring(4);
+                      }
+                      if (phoneNumber == pattern) {
                         setState(() {
                           isUnlock = true;
-                          controller.passControl("OPEN DOOR");
+                          controller.passControl("OPEN-$pattern");
                         });
                       } else {
                         phoneNumber = '';

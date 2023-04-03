@@ -54,10 +54,10 @@ class HomeController extends GetxController {
 
   onSwitched(int index) {
     if (index == 0) {
-      if (ledValue == '0x000000'.obs) {
-        ledControl('0xffffff'.obs);
+      if (ledValue == '#000000'.obs) {
+        ledControl('#ffffff'.obs);
       } else {
-        ledControl('0x000000'.obs);
+        ledControl('#000000'.obs);
       }
     } else if (index == 1) {
       if (fanSpeed != 0) {
@@ -66,27 +66,41 @@ class HomeController extends GetxController {
         fanControl(50);
       }
     } else if (index == 2) {
-      if (gasAlarm == 'OFF') {
-        gasAlarmControl("ON");
+      if (gasAlarm == 'ON') {
+        gasAlarmControl('OFF');
       } else {
-        gasAlarmControl("OFF");
+        gasAlarmControl('ON');
       }
     } else if (index == 3) {
-      if (password == 'OFF') {
-        passControl("ON");
+      if (password.length == 10) {
+        // String a = password.substring(0, 3);
+        String b = password.substring(4);
+        passControl('ON-$b');
       } else {
-        passControl("OFF");
+        // String a = password.substring(0, 2);
+        String b = password.substring(3);
+        passControl('OFF-$b');
       }
     }
   }
 
   passControl(String value) async {
-    if (value.length == 6) password = value;
-    if (value == "OFF") password = 'OFF';
+    // if (value.length == 6) password = value;
+    // if (value == "OFF") password = 'OFF';
+    // getDataAPI.updateDoorData(value);
+    // if (value == 'ON') {
+    //   AdafruitGET pass = await getDataAPI.getDoorData();
+    //   password = pass.lastValue!;
+    // }
     getDataAPI.updateDoorData(value);
-    if (value == 'ON') {
-      AdafruitGET pass = await getDataAPI.getDoorData();
-      password = pass.lastValue!;
+    if (value[0] == 'C' || value[1] == 'P') {
+      if (value[0] == 'C') {
+        password = 'ON-${value.substring(7)}';
+      } else {
+        password = 'ON-${value.substring(5)}';
+      }
+    } else {
+      password = value;
     }
   }
 

@@ -30,24 +30,45 @@ class _HomePageState extends State<HomePage> {
     //     });
     //   }
     // }
-    if (HomeController.ledValue != "0x000000".obs) {
+
+    // Led
+    if (HomeController.ledValue != "#000000".obs) {
       setState(() {
         mySmartDevices[0][2] = true;
       });
+    } else {
+      setState(() {
+        mySmartDevices[0][2] = false;
+      });
     }
+    // Fan
     if (HomeController.fanSpeed != 0) {
       setState(() {
         mySmartDevices[1][2] = true;
       });
+    } else {
+      setState(() {
+        mySmartDevices[1][2] = false;
+      });
     }
+    // GasAlarm
     if (HomeController.gasAlarm == 'ON') {
       setState(() {
         mySmartDevices[2][2] = true;
       });
+    } else {
+      setState(() {
+        mySmartDevices[2][2] = false;
+      });
     }
-    if (HomeController.password == "ON") {
+    // Door
+    if (HomeController.password.length == 9) {
       setState(() {
         mySmartDevices[3][2] = true;
+      });
+    } else {
+      setState(() {
+        mySmartDevices[3][2] = false;
       });
     }
     super.initState();
@@ -85,9 +106,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void showAlarm(BuildContext context) {
-    showDialog(context: context, builder: (context) => AlertDialog());
+    showDialog(context: context, builder: (context) => const AlertDialog());
   }
 
+  static double? gasPercent = 0.0;
   @override
   Widget build(BuildContext context) {
     // ignore: unrelated_type_equality_checks
@@ -212,8 +234,6 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(24),
-                  // color: const Color.fromARGB(44, 164, 167, 189),
-                  // color: Colors.deepPurple[200],
                   color: Colors.white,
                 ),
                 child: Padding(
@@ -249,18 +269,6 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(
                               width: 30,
                             ),
-                            // Column(
-                            //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   children: [
-                            // Text(
-                            //   'Today 10 March, 2023',
-                            //   style: GoogleFonts.lexendDeca(
-                            //       color:
-                            //           const Color.fromRGBO(34, 73, 87, 1)),
-                            // ),
-                            // const SizedBox(
-                            //   height: 5,
-                            // ),
                             Text(
                               'Sunny',
                               style: GoogleFonts.lexendDeca(
@@ -272,7 +280,6 @@ class _HomePageState extends State<HomePage> {
                               // ],
                             ),
                             const Spacer(),
-
                             StreamBuilder<AdafruitGET>(
                               stream: controller.tempStream.stream,
                               builder: (context, snapshot) {
@@ -301,15 +308,6 @@ class _HomePageState extends State<HomePage> {
                                 }
                               },
                             ),
-
-                            // Text(
-                            //   '${HomeController.tempValue}\u2103',
-                            //   style: GoogleFonts.lexendDeca(
-                            //     fontSize: 18,
-                            //     fontWeight: FontWeight.bold,
-                            //     color: const Color.fromRGBO(34, 73, 87, 1),
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -339,12 +337,6 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // Text(
-                                  //   'Energy Expenses',
-                                  //   style: GoogleFonts.lexendDeca(
-                                  //       color: const Color.fromRGBO(
-                                  //           34, 73, 87, 1)),
-                                  // ),
                                   Text(
                                     'Gas\nconcentration',
                                     style: GoogleFonts.lexendDeca(
@@ -373,8 +365,13 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   );
                                 } else {
+                                  if (snapshot.data != null) {
+                                    gasPercent = double.parse(
+                                            snapshot.data!.lastValue!) /
+                                        10000;
+                                  }
                                   return Text(
-                                    '${snapshot.data!.lastValue}%',
+                                    '${gasPercent.toString()}%',
                                     style: GoogleFonts.lexendDeca(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
