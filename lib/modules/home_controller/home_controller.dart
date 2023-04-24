@@ -11,6 +11,8 @@ import 'package:get/get.dart';
 // import 'package:hsmarthome/pages/app/home_page/home_page.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../pages/app/home_page/home_page.dart';
+
 class HomeController extends GetxController {
   // padding constants
   final double horizontalPadding = 30;
@@ -57,10 +59,12 @@ class HomeController extends GetxController {
       if (ledValue == '#000000'.obs) {
         ledControl('#ffffff'.obs);
       } else {
+        HomePage.reset(0);
         ledControl('#000000'.obs);
       }
     } else if (index == 1) {
       if (fanSpeed != 0) {
+        HomePage.reset(1);
         fanControl(0);
       } else {
         fanControl(50);

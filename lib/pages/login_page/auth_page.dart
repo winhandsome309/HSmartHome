@@ -16,7 +16,9 @@ class AuthPage extends StatelessWidget {
           'username': username,
           'email': email,
         })
+        // ignore: avoid_print
         .then((value) => print("User Added"))
+        // ignore: avoid_print
         .catchError((error) => print("Failed to add user: $error"));
   }
 

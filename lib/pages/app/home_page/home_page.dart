@@ -13,6 +13,19 @@ import '../../../data/models/adafruit_get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  static bool autoLed = false;
+  static bool autoFan = false;
+  static bool timerLed = false;
+  static bool timerFan = false;
+  static void reset(int index) {
+    if (index == 0) {
+      autoLed = false;
+      timerLed = false;
+    } else if (index == 1) {
+      autoFan = false;
+      timerFan = false;
+    }
+  }
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,16 +34,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  // static bool autoLed = false;
+  // static bool autoFan = false;
+  // static bool timerLed = false;
+  // static bool timerFan = false;
+
   @override
   initState() {
-    // for (int i = 0; i < 2; i++) {
-    //   if (HomeController.isToggled[i] != mySmartDevices[i][2]) {
-    //     setState(() {
-    //       mySmartDevices[i][2] = HomeController.isToggled[i];
-    //     });
-    //   }
-    // }
-
     // Led
     if (HomeController.ledValue != "#000000".obs) {
       setState(() {
@@ -216,6 +226,40 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                     ),
+                    // child: StreamBuilder<QuerySnapshot>(
+                    //   stream: FirebaseFirestore.instance
+                    //       .collection('users')
+                    //       // .where('email', isEqualTo: auth.currentUser?.email)
+                    //       .snapshots(),
+                    //   builder: (BuildContext context,
+                    //       AsyncSnapshot<QuerySnapshot> snapshot) {
+                    //     if (snapshot.hasError) {
+                    //       return const Text('Something went wrong');
+                    //     }
+
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Text("Loading");
+                    //     }
+                    //     // return Text(
+                    //     //   snapshot.data?.docs[0].get('username') ?? "username",
+                    //     //   style: GoogleFonts.lexendDeca(
+                    //     //       fontSize: 20,
+                    //     //       color: const Color.fromRGBO(34, 73, 87, 1)),
+                    //     // );
+                    //     return ListView(
+                    //       children: snapshot.data!.docs
+                    //           .map((DocumentSnapshot document) {
+                    //         Map<String, dynamic> data =
+                    //             document.data()! as Map<String, dynamic>;
+                    //         return ListTile(
+                    //           title: Text(data['full_name']),
+                    //           subtitle: Text(data['company']),
+                    //         );
+                    //       }).toList(),
+                    //     );
+                    //   },
+                    // ),
                   ),
                   // account icon
                   Icon(

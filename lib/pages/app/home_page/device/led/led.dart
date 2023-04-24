@@ -7,6 +7,9 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 
+import '../../../buttom_home.dart';
+import '../../home_page.dart';
+
 class Led extends StatefulWidget {
   Led({super.key});
 
@@ -31,6 +34,8 @@ class Led extends StatefulWidget {
 class LedState extends State<Led> {
   final Duration animDuration = const Duration(milliseconds: 250);
 
+  bool turnOn = true;
+
   int touchedIndex = -1;
 
   bool isPlaying = false;
@@ -40,6 +45,12 @@ class LedState extends State<Led> {
   static RxString oldColor = '#301b1b'.obs;
 
   final controller = Get.put(HomeController());
+
+  final turnOff = Get.put(const HomePage());
+
+  // bool auto = false;
+
+  // bool timer = false;
 
   @override
   initState() {
@@ -162,56 +173,6 @@ class LedState extends State<Led> {
             ),
 
             const SizedBox(height: 40),
-            // ColorPicker(
-            //   paletteType: PaletteType.hueWheel,
-            //   pickerColor: HexColor(oldColor.value),
-            //   // ignore: deprecated_member_use
-            //   showLabel: false,
-            //   colorHistory: [HexColor(oldColor.value)],
-            //   onColorChanged: (color) => setState(
-            //     () => {
-            //       oldColor =
-            //           '#${color.value.toRadixString(16).substring(2)}'.obs,
-            //     },
-            //   ),
-            // ),
-            // MaterialColorPicker(
-            //   allowShades: false,
-            // onColorChange: (color) {
-            // Handle color changes
-            // oldColor = '#${color.value.toRadixString(16).substring(2)}'.obs;
-            // print(oldColor);
-            //   oldColor =
-            //       '#${color!.value.toRadixString(16).substring(2)}'.obs;
-            // },
-            // onMainColorChange: (color) => setState(
-            //   () => oldColor =
-            //       '#${color!.value.toRadixString(16).substring(2)}'.obs,
-            // ),
-
-            // onColorChange: (color) => setState(
-            //   () => {
-            //     oldColor =
-            //         '#${color.value.toRadixString(16).substring(2)}'.obs,
-            //   },
-            // ),
-
-            //   selectedColor: Colors.red,
-            //   circleSize: 55,
-            //   spacing: 25,
-            //   colors: const [
-            //     // Color(0xffb74093);
-            //     Colors.deepOrange,
-            //     Colors.yellow,
-            //     Colors.lightGreen,
-            //     Colors.grey,
-            //     Colors.red,
-            //     Colors.pink,
-            //     Colors.purple,
-            //     Colors.blue,
-            //     Colors.amber,
-            //   ],
-            // ),
             BlockPicker(
               pickerColor: pickerColor,
               onColorChanged: onColorChanged,
@@ -253,84 +214,121 @@ class LedState extends State<Led> {
                   bottom: 70, top: 30, left: 30, right: 30),
               child: Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      height: 70,
-                      width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.timer_outlined,
-                              size: 30,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Timer',
-                                style: GoogleFonts.lexendDeca(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(34, 73, 87, 1),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (HomePage.timerLed == false) {
+                          HomePage.timerLed = true;
+                        } else {
+                          HomePage.timerLed = false;
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HomePage.timerLed
+                            ? Colors.grey.shade500
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: SizedBox(
+                        height: 70,
+                        width: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.timer_outlined,
+                                size: 30,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Timer',
+                                  style: GoogleFonts.lexendDeca(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromRGBO(34, 73, 87, 1),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5),
-                    child: Stack(
-                      children: const [
-                        Icon(
-                          Icons.circle,
-                          size: 80,
-                          color: Colors.red,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 23, top: 22),
-                          child: Icon(
-                            Icons.power_settings_new,
-                            color: Colors.white,
-                            size: 35,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.onSwitched(0);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 80,
+                            color: turnOn ? Colors.red : Colors.red.shade500,
                           ),
-                        ),
-                      ],
+                          const Padding(
+                            padding: EdgeInsets.only(left: 23, top: 22),
+                            child: Icon(
+                              Icons.power_settings_new,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      height: 70,
-                      width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Text(
-                                'Auto',
-                                style: GoogleFonts.lexendDeca(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(34, 73, 87, 1),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (HomePage.autoLed == false) {
+                          HomePage.autoLed = true;
+                        } else {
+                          HomePage.autoLed = false;
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HomePage.autoLed
+                            ? Colors.grey.shade500
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: SizedBox(
+                        height: 70,
+                        width: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Text(
+                                  'Auto',
+                                  style: GoogleFonts.lexendDeca(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromRGBO(34, 73, 87, 1),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const Icon(Icons.auto_awesome),
-                          ],
+                              const Icon(Icons.auto_awesome),
+                            ],
+                          ),
                         ),
                       ),
                     ),

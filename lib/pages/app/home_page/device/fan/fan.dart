@@ -1,13 +1,18 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:get/get.dart';
 import 'package:hsmarthome/bar_chart/resources/app_resources.dart';
 import 'package:hsmarthome/bar_chart/extensions/color_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/pages/app/dashboard_page/dashboard.dart';
 import 'package:hsmarthome/pages/app/home_page/device/fan/slider_widget.dart';
+
+import '../../../buttom_home.dart';
+import '../../home_page.dart';
 
 class Fan extends StatefulWidget {
   Fan({super.key});
@@ -36,6 +41,12 @@ class FanState extends State<Fan> {
   int touchedIndex = -1;
 
   bool isPlaying = false;
+
+  final controller = Get.put(HomeController());
+
+  // bool auto = false;
+
+  // bool timer = false;
 
   @override
   Widget build(BuildContext context) {
@@ -220,84 +231,121 @@ class FanState extends State<Fan> {
                   bottom: 70, top: 30, left: 30, right: 30),
               child: Row(
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      height: 70,
-                      width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.timer_outlined,
-                              size: 30,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                'Timer',
-                                style: GoogleFonts.lexendDeca(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(34, 73, 87, 1),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (HomePage.timerFan == false) {
+                          HomePage.timerFan = true;
+                        } else {
+                          HomePage.timerFan = false;
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HomePage.timerFan
+                            ? Colors.grey.shade500
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: SizedBox(
+                        height: 70,
+                        width: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.timer_outlined,
+                                size: 30,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text(
+                                  'Timer',
+                                  style: GoogleFonts.lexendDeca(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromRGBO(34, 73, 87, 1),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5),
-                    child: Stack(
-                      children: const [
-                        Icon(
-                          Icons.circle,
-                          size: 80,
-                          color: Colors.red,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 23, top: 22),
-                          child: Icon(
-                            Icons.power_settings_new,
-                            color: Colors.white,
-                            size: 35,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.onSwitched(1);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Home()),
+                        );
+                      },
+                      child: Stack(
+                        children: const [
+                          Icon(
+                            Icons.circle,
+                            size: 80,
+                            color: Colors.red,
                           ),
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsets.only(left: 23, top: 22),
+                            child: Icon(
+                              Icons.power_settings_new,
+                              color: Colors.white,
+                              size: 35,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: SizedBox(
-                      height: 70,
-                      width: 120,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              child: Text(
-                                'Auto',
-                                style: GoogleFonts.lexendDeca(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color.fromRGBO(34, 73, 87, 1),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (HomePage.autoFan == false) {
+                          HomePage.autoFan = true;
+                        } else {
+                          HomePage.autoFan = false;
+                        }
+                      });
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: HomePage.autoFan
+                            ? Colors.grey.shade500
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: SizedBox(
+                        height: 70,
+                        width: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Text(
+                                  'Auto',
+                                  style: GoogleFonts.lexendDeca(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color.fromRGBO(34, 73, 87, 1),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const Icon(Icons.auto_awesome),
-                          ],
+                              const Icon(Icons.auto_awesome),
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hsmarthome/data/models/adafruit_get.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: camel_case_types
 class getDataAPI {
   static String username = 'huyhoang16';
   static String? aioKey = dotenv.env['API_Key'].toString();

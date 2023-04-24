@@ -90,12 +90,13 @@ class _SmartDeviceBoxState extends State<SmartDeviceBox> {
                   ),
                   const Spacer(),
                   GestureDetector(
-                    onTap: widget.onTap,
+                    // onTap: widget.onTap,
+                    onTap: widget.powerOn ? widget.onTap : null,
                     child: Icon(
                       Icons.arrow_forward_ios,
                       color: (widget.smartDeviceName == 'Gas Detector'
                           ? (widget.powerOn ? Colors.grey[900] : Colors.white)
-                          : (widget.powerOn ? Colors.white : Colors.black)),
+                          : (widget.powerOn ? Colors.white : Colors.white)),
                     ),
                   ),
                   const SizedBox(
