@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hsmarthome/util/smart_device_box.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class HomePage extends StatefulWidget {
   static bool autoFan = false;
   static bool timerLed = false;
   static bool timerFan = false;
+  static TimeOfDay timeOfDayLed = TimeOfDay(hour: 8, minute: 30);
+  static TimeOfDay timeOfDayFan = TimeOfDay(hour: 8, minute: 30);
   static void reset(int index) {
     if (index == 0) {
       autoLed = false;
@@ -38,47 +41,173 @@ class _HomePageState extends State<HomePage> {
   // static bool autoFan = false;
   // static bool timerLed = false;
   // static bool timerFan = false;
+  final passwordAccount = TextEditingController();
+  void showErrorMessage(String message) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Oh no!',
+        message: message,
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
+    );
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  void enterAccountPassword() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: Column(
+              children: [
+                Text(
+                  'Enter your password to coninue',
+                  style:
+                      GoogleFonts.lexendDeca(color: Colors.red, fontSize: 15),
+                ),
+                const SizedBox(height: 30.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: TextFormField(
+                    style: GoogleFonts.lexendDeca(
+                      fontSize: 15,
+                      color: Colors.white,
+                    ),
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Color.fromRGBO(32, 223, 127, 1)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      fillColor: const Color.fromRGBO(34, 73, 87, 1),
+                      filled: true,
+                      hintText: 'Enter your password',
+                      hintStyle: GoogleFonts.lexendDeca(
+                        fontSize: 15,
+                        color: Colors.white,
+                      ),
+                      // prefixIcon: const Icon(Icons.person),
+                    ),
+                    controller: passwordAccount,
+                    obscureText: false,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    // if (_key.currentState!.validate()) {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: HomeController.emailAccount,
+                        password: passwordAccount.text,
+                      );
+                      // ignore: use_build_context_synchronously
+                      // Navigator.pop(context);
+                      // ignore: use_build_context_synchronously
+                      setState(() {
+                        HomeController.mySmartDevices[3][2] = true;
+                        HomeController.countOpenDoor = 0;
+                        HomeController.wrong5times = false;
+                      });
+                    } on FirebaseAuthException catch (e) {
+                      // Navigator.pop(context);
+                      showErrorMessage(e.code);
+                    }
+                    // if (_key.currentState!.validate()) {
+                    // await signUserIn();
+                    // Navigator.pop(context);
+                    // resetPassword();
+                    // }
+                  },
+                  // child: GestureDetector(
+                  //   onTap: () async {
+                  //     if (_key.currentState!.validate()) {
+                  //       await signUserIn();
+                  //     }
+                  //   },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.symmetric(horizontal: 75),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Continue',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  //   ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   initState() {
     // Led
     if (HomeController.ledValue != "#000000".obs) {
       setState(() {
-        mySmartDevices[0][2] = true;
+        HomeController.mySmartDevices[0][2] = true;
       });
     } else {
       setState(() {
-        mySmartDevices[0][2] = false;
+        HomeController.mySmartDevices[0][2] = false;
       });
     }
     // Fan
     if (HomeController.fanSpeed != 0) {
       setState(() {
-        mySmartDevices[1][2] = true;
+        HomeController.mySmartDevices[1][2] = true;
       });
     } else {
       setState(() {
-        mySmartDevices[1][2] = false;
+        HomeController.mySmartDevices[1][2] = false;
       });
     }
     // GasAlarm
     if (HomeController.gasAlarm == 'ON') {
       setState(() {
-        mySmartDevices[2][2] = true;
+        HomeController.mySmartDevices[2][2] = true;
       });
     } else {
       setState(() {
-        mySmartDevices[2][2] = false;
+        HomeController.mySmartDevices[2][2] = false;
       });
     }
     // Door
     if (HomeController.password.length == 9) {
       setState(() {
-        mySmartDevices[3][2] = true;
+        HomeController.mySmartDevices[3][2] = true;
       });
     } else {
       setState(() {
-        mySmartDevices[3][2] = false;
+        HomeController.mySmartDevices[3][2] = false;
       });
     }
     super.initState();
@@ -98,21 +227,27 @@ class _HomePageState extends State<HomePage> {
 
   bool a = true;
   // list of smart devices
-  static List mySmartDevices = [
-    // [ smartDeviceName, iconPath , powerStatus ]
-    ["Smart Light", "lib/images/light-bulb.png", false],
-    ["Smart Fan", "lib/images/fan.png", false],
-    ["Gas Detector", "lib/images/gas-detector.png", false],
-    ["Camera Door", "lib/images/door-camera.png", false],
-    ["Add", "lib/images/add.png", false],
-  ];
+  // static List mySmartDevices = [
+  //   // [ smartDeviceName, iconPath , powerStatus ]
+  //   ["Smart Light", "lib/images/light-bulb.png", false],
+  //   ["Smart Fan", "lib/images/fan.png", false],
+  //   ["Gas Detector", "lib/images/gas-detector.png", false],
+  //   ["Camera Door", "lib/images/door-camera.png", false],
+  //   ["Add", "lib/images/add.png", false],
+  // ];
 
   // power button switched
   powerSwitchChanged(bool value, int index) {
-    setState(() {
-      mySmartDevices[index][2] = value;
-    });
-    controller.onSwitched(index);
+    if (index == 3 &&
+        HomeController.mySmartDevices[index][2] == false &&
+        HomeController.wrong5times == true) {
+      enterAccountPassword();
+    } else {
+      setState(() {
+        HomeController.mySmartDevices[index][2] = value;
+      });
+      controller.onSwitched(index);
+    }
   }
 
   void showAlarm(BuildContext context) {
@@ -181,6 +316,7 @@ class _HomePageState extends State<HomePage> {
     //     },
     //   );
     // }
+
     return Scaffold(
       backgroundColor: const Color.fromRGBO(242, 242, 246, 1),
       body: SafeArea(
@@ -415,7 +551,7 @@ class _HomePageState extends State<HomePage> {
                                         10000;
                                   }
                                   return Text(
-                                    '${gasPercent.toString()}%',
+                                    '${gasPercent.toString()} ppm',
                                     style: GoogleFonts.lexendDeca(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -466,7 +602,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       GridView.builder(
-                        itemCount: mySmartDevices.length - 1,
+                        itemCount: HomeController.mySmartDevices.length - 1,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -477,9 +613,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         itemBuilder: (context, index) {
                           return SmartDeviceBox(
-                            smartDeviceName: mySmartDevices[index][0],
-                            iconPath: mySmartDevices[index][1],
-                            powerOn: mySmartDevices[index][2],
+                            smartDeviceName:
+                                HomeController.mySmartDevices[index][0],
+                            iconPath: HomeController.mySmartDevices[index][1],
+                            powerOn: HomeController.mySmartDevices[index][2],
                             onChanged: (value) =>
                                 powerSwitchChanged(value, index),
                             onTap: () => {
@@ -568,8 +705,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-// abstract class GetTemp extends GetWidget<HomeController>{
-//   const GetTemp({super.key});
-
-// }

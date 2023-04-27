@@ -5,6 +5,8 @@ import 'package:hsmarthome/pages/app/home_page/device/fan/fan_utlis.dart';
 import 'package:flutter/material.dart';
 
 class CustomArc extends StatelessWidget {
+  const CustomArc({super.key});
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(

@@ -48,6 +48,8 @@ class LedState extends State<Led> {
 
   final turnOff = Get.put(const HomePage());
 
+  // TimeOfDay _timeOfDay = const TimeOfDay(hour: 8, minute: 30);
+
   // bool auto = false;
 
   // bool timer = false;
@@ -140,7 +142,7 @@ class LedState extends State<Led> {
             //     ],
             //   ),
             // ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20),
@@ -172,7 +174,7 @@ class LedState extends State<Led> {
               ),
             ),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 30),
             BlockPicker(
               pickerColor: pickerColor,
               onColorChanged: onColorChanged,
@@ -187,9 +189,6 @@ class LedState extends State<Led> {
                 Color(0xff800080),
                 Color(0xff000000),
               ],
-            ),
-            const SizedBox(
-              height: 0,
             ),
             SizedBox(
               height: 50,
@@ -208,16 +207,30 @@ class LedState extends State<Led> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.only(
-                  bottom: 70, top: 30, left: 30, right: 30),
+                  bottom: 30, top: 0, left: 30, right: 30),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () {
                       setState(() {
                         if (HomePage.timerLed == false) {
+                          showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now())
+                              .then((value) {
+                            setState(() {
+                              HomePage.timeOfDayLed = value!;
+                              controller.setTimerLed(
+                                  HomePage.timeOfDayLed.hour.toString(),
+                                  HomePage.timeOfDayLed.minute.toString());
+                            });
+                          });
+                          // controller.setTimerLed(
+                          //     HomePage.timeOfDayLed.hour.toString(),
+                          //     HomePage.timeOfDayLed.minute.toString());
                           HomePage.timerLed = true;
                         } else {
                           HomePage.timerLed = false;
@@ -294,8 +307,10 @@ class LedState extends State<Led> {
                     onTap: () {
                       setState(() {
                         if (HomePage.autoLed == false) {
+                          controller.lightLedControl("ON");
                           HomePage.autoLed = true;
                         } else {
+                          controller.lightLedControl("OFF");
                           HomePage.autoLed = false;
                         }
                       });
@@ -336,6 +351,18 @@ class LedState extends State<Led> {
                 ],
               ),
             ),
+            Text(
+              (HomePage.timerLed == true)
+                  ? ("Timer: ${HomePage.timeOfDayLed.hour}:${HomePage.timeOfDayLed.minute}")
+                  : "",
+              style: GoogleFonts.lexendDeca(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: const Color.fromRGBO(34, 73, 87, 1),
+              ),
+            ),
+            // if (HomePage.timerLed == true) Text('Timer: ${HomePage.timeOfDay}'),
+            const SizedBox(height: 60),
           ],
         ),
       ),

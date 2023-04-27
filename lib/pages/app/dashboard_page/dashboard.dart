@@ -8,6 +8,8 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/pages/app/dashboard_page/dashboard_device.dart';
 
+import '../../../modules/home_controller/home_controller.dart';
+
 class Dashboard extends StatefulWidget {
   Dashboard({super.key});
 
@@ -187,7 +189,8 @@ class DashboardState extends State<Dashboard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 0),
                         child: Text(
                           "ENERGY USED",
                           style: TextStyle(
@@ -316,15 +319,13 @@ class DashboardState extends State<Dashboard> {
                             ),
                           ],
                         ),
-                        // ),
-                        // ),
-                        // ),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
+            const SizedBox(height: 5),
           ],
         ),
       ),
@@ -368,19 +369,26 @@ class DashboardState extends State<Dashboard> {
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 100, isTouched: i == touchedIndex);
+            return makeGroupData(0, HomeController.energy[0],
+                isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 120, isTouched: i == touchedIndex);
+            return makeGroupData(1, HomeController.energy[1],
+                isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 140, isTouched: i == touchedIndex);
+            return makeGroupData(2, HomeController.energy[2],
+                isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 150, isTouched: i == touchedIndex);
+            return makeGroupData(3, HomeController.energy[3],
+                isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 100, isTouched: i == touchedIndex);
+            return makeGroupData(4, HomeController.energy[4],
+                isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 300, isTouched: i == touchedIndex);
+            return makeGroupData(5, HomeController.energy[5],
+                isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 400, isTouched: i == touchedIndex);
+            return makeGroupData(6, HomeController.energy[6],
+                isTouched: i == touchedIndex);
           default:
             return throw Error();
         }

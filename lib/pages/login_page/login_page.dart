@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:proste_bezier_curve/proste_bezier_curve.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -51,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
+      HomeController.emailAccount = emailController.text;
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       // ignore: use_build_context_synchronously
@@ -91,6 +93,11 @@ class _LoginPageState extends State<LoginPage> {
   HomeController x = HomeController();
   @override
   initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
     super.initState();
     x.streamInit();
   }

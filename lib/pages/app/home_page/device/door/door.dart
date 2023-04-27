@@ -8,6 +8,9 @@ import 'package:hsmarthome/modules/home_controller/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../../buttom_home.dart';
 
 enum _MenuValues {
   reset,
@@ -29,10 +32,27 @@ class _DoorState extends State<Door> {
   final oldPasswordDoor = TextEditingController();
   final newPasswordDoor = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final passwordAccount = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   final controller = Get.put(HomeController());
 
   AnimateIconController controllerAnimated = AnimateIconController();
+
+  Future signUserIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: HomeController.emailAccount,
+        password: passwordAccount.text,
+      );
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      // ignore: use_build_context_synchronously
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      showErrorMessage(e.code);
+    }
+  }
 
   void showErrorMessage(String message) {
     final snackBar = SnackBar(
@@ -169,6 +189,7 @@ class _DoorState extends State<Door> {
                             else
                               {
                                 Navigator.pop(context),
+                                Navigator.pop(context),
                                 showSuccessMessage('Successfully'),
                                 controller.passControl(
                                     'CHANGE-${newPasswordDoor.text}'),
@@ -207,12 +228,6 @@ class _DoorState extends State<Door> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          //   icon: const Icon(
-          //     Icons.check_circle_outline_sharp,
-          //     size: 100,
-          //     color: Colors.green,
-          //   ),
-          //   backgroundColor: Colors.white,
           title: Center(
             child: Column(
               children: [
@@ -248,7 +263,7 @@ class _DoorState extends State<Door> {
                       ),
                       // prefixIcon: const Icon(Icons.person),
                     ),
-                    // controller: _usernameController,
+                    controller: passwordAccount,
                     obscureText: false,
                   ),
                 ),
@@ -256,10 +271,33 @@ class _DoorState extends State<Door> {
                   height: 20,
                 ),
                 GestureDetector(
-                  onTap: () => {
-                    Navigator.pop(context),
-                    resetPassword(),
+                  onTap: () async {
+                    // if (_key.currentState!.validate()) {
+                    try {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: HomeController.emailAccount,
+                        password: passwordAccount.text,
+                      );
+                      // ignore: use_build_context_synchronously
+                      // Navigator.pop(context);
+                      // ignore: use_build_context_synchronously
+                      resetPassword();
+                    } on FirebaseAuthException catch (e) {
+                      // Navigator.pop(context);
+                      showErrorMessage(e.code);
+                    }
+                    // if (_key.currentState!.validate()) {
+                    // await signUserIn();
+                    // Navigator.pop(context);
+                    // resetPassword();
+                    // }
                   },
+                  // child: GestureDetector(
+                  //   onTap: () async {
+                  //     if (_key.currentState!.validate()) {
+                  //       await signUserIn();
+                  //     }
+                  //   },
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     margin: const EdgeInsets.symmetric(horizontal: 75),
@@ -278,6 +316,7 @@ class _DoorState extends State<Door> {
                       ),
                     ),
                   ),
+                  //   ),
                 ),
               ],
             ),
@@ -403,30 +442,64 @@ class _DoorState extends State<Door> {
                         pattern = HomeController.password.substring(4);
                       }
                       if (phoneNumber == pattern) {
+                        HomeController.countOpenDoor = 0;
                         setState(() {
                           isUnlock = true;
                           controller.passControl("OPEN-$pattern");
                         });
                       } else {
+                        HomeController.countOpenDoor++;
+                        // if (HomeController.countOpenDoor == 5) {
+                        //   HomeController.countOpenDoor = 0;
+                        //   HomeController.mySmartDevices[3][2] = false;
+                        //   HomeController.wrong5times = true;
+                        //   String b = HomeController.password.substring(3);
+                        //   controller.passControl('OFF-$b');
+                        //   Navigator.pop(context);
+                        //   Navigator.pop(context);
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => const Home()),
+                        //   );
+                        // }
                         phoneNumber = '';
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          final snackBar = SnackBar(
-                            /// need to set following properties for best effect of awesome_snackbar_content
-                            elevation: 0,
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: Colors.transparent,
-                            content: AwesomeSnackbarContent(
-                              title: 'On Snap!',
-                              message: wrongPass,
+                        Future.delayed(
+                          const Duration(milliseconds: 100),
+                          () {
+                            final snackBar = SnackBar(
+                              /// need to set following properties for best effect of awesome_snackbar_content
+                              elevation: 0,
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: Colors.transparent,
+                              content: AwesomeSnackbarContent(
+                                title: 'On Snap!',
+                                message:
+                                    "$wrongPass (${5 - HomeController.countOpenDoor} times left)",
 
-                              /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-                              contentType: ContentType.failure,
-                            ),
+                                /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+                                contentType: ContentType.failure,
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                              ..hideCurrentSnackBar()
+                              ..showSnackBar(snackBar);
+                          },
+                        );
+                        if (HomeController.countOpenDoor == 5) {
+                          HomeController.countOpenDoor = 0;
+                          HomeController.mySmartDevices[3][2] = false;
+                          HomeController.wrong5times = true;
+                          String b = HomeController.password.substring(3);
+                          controller.passControl('OFF-$b');
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Home()),
                           );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(snackBar);
-                        });
+                        }
                         // void showErrorMessage(String message) {
                         // final snackBar = SnackBar(
                         //   /// need to set following properties for best effect of awesome_snackbar_content

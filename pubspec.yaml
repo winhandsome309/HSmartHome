@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_nav_bar: ^5.0.6
   firebase_auth: ^4.2.8
-  firebase_core: ^2.6.1
+  firebase_core: ^2.10.0
   cloud_firestore: ^4.4.3
 
   # Google Sign In
@@ -80,7 +80,10 @@ dependencies:
   universal_platform: ^1.0.0+1
 
   # Notifications
-  firebase_messaging: ^14.2.5
+  firebase_messaging: ^14.4.1
+  overlay_support: ^2.1.0
+  firebase_messaging_platform_interface: ^4.3.1
+  awesome_notifications: ^0.7.4+1
 
   # Visualization
   percent_indicator: ^4.2.2

@@ -228,14 +228,29 @@ class FanState extends State<Fan> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  bottom: 70, top: 30, left: 30, right: 30),
+                  bottom: 20, top: 30, left: 30, right: 30),
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () {
                       setState(() {
                         if (HomePage.timerFan == false) {
-                          HomePage.timerFan = true;
+                          showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now())
+                              .then((value) {
+                            setState(() {
+                              HomePage.timeOfDayFan = value!;
+                              HomePage.timerFan = true;
+                              controller.setTimerFan(
+                                  HomePage.timeOfDayFan.hour.toString(),
+                                  HomePage.timeOfDayFan.minute.toString());
+                            });
+                          });
+                          // HomePage.timerFan = true;
+                          // controller.setTimerFan(
+                          //     HomePage.timeOfDayFan.hour.toString(),
+                          //     HomePage.timeOfDayFan.minute.toString());
                         } else {
                           HomePage.timerFan = false;
                         }
@@ -311,8 +326,10 @@ class FanState extends State<Fan> {
                     onTap: () {
                       setState(() {
                         if (HomePage.autoFan == false) {
+                          controller.tempFanControl("ON");
                           HomePage.autoFan = true;
                         } else {
+                          controller.tempFanControl("OFF");
                           HomePage.autoFan = false;
                         }
                       });
@@ -352,6 +369,19 @@ class FanState extends State<Fan> {
                   ),
                 ],
               ),
+            ),
+            Text(
+              (HomePage.timerFan == true)
+                  ? ("Timer: ${HomePage.timeOfDayFan.hour}:${HomePage.timeOfDayFan.minute}")
+                  : "",
+              style: GoogleFonts.lexendDeca(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: const Color.fromRGBO(34, 73, 87, 1),
+              ),
+            ),
+            const SizedBox(
+              height: 40,
             ),
           ],
         ),

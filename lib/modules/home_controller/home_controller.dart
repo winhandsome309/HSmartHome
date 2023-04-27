@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../pages/app/home_page/home_page.dart';
+import '../../pages/app/notification_page/noti_page.dart';
 
 class HomeController extends GetxController {
   // padding constants
@@ -52,6 +53,26 @@ class HomeController extends GetxController {
   static double tempValue = 0.0;
   static String tempFan = "";
 
+  static List energy = [0.0, 0.0, 50.0, 10.0, 0.0, 0.0, 0.0];
+
+  static String emailAccount = "abc";
+
+  static int countOpenDoor = 0;
+
+  // ignore: non_constant_identifier_names
+  static List noti_list = [];
+  String currTime = "";
+  static bool wrong5times = false;
+
+  static List mySmartDevices = [
+    // [ smartDeviceName, iconPath , powerStatus ]
+    ["Smart Light", "lib/images/light-bulb.png", false],
+    ["Smart Fan", "lib/images/fan.png", false],
+    ["Gas Detector", "lib/images/gas-detector.png", false],
+    ["Camera Door", "lib/images/door-camera.png", false],
+    ["Add", "lib/images/add.png", false],
+  ];
+
   // static List<bool> isToggled = [false, false, false, false];
 
   onSwitched(int index) {
@@ -62,12 +83,20 @@ class HomeController extends GetxController {
         HomePage.reset(0);
         ledControl('#000000'.obs);
       }
+      if (HomePage.autoLed == true) {
+        HomePage.autoLed = false;
+        lightLedControl("OFF");
+      }
     } else if (index == 1) {
       if (fanSpeed != 0) {
         HomePage.reset(1);
         fanControl(0);
       } else {
         fanControl(50);
+      }
+      if (HomePage.autoFan == true) {
+        HomePage.autoFan = false;
+        tempFanControl("OFF");
       }
     } else if (index == 2) {
       if (gasAlarm == 'ON') {
@@ -81,7 +110,6 @@ class HomeController extends GetxController {
         String b = password.substring(4);
         passControl('ON-$b');
       } else {
-        // String a = password.substring(0, 2);
         String b = password.substring(3);
         passControl('OFF-$b');
       }
@@ -125,13 +153,31 @@ class HomeController extends GetxController {
   }
 
   lightLedControl(String value) {
-    lightLed = value;
+    // lightLed = value;
     getDataAPI.updateLightLedData(value);
   }
 
   tempFanControl(String value) {
-    tempFan = value;
+    // tempFan = value;
     getDataAPI.updateTempFanData(value);
+  }
+
+  setTimerLed(String hour, String minute) {
+    String ans = "";
+    if (hour.length == 1) ans += "0";
+    ans += hour;
+    if (minute.length == 1) ans += "0";
+    ans += minute;
+    getDataAPI.updateLedData(ans);
+  }
+
+  setTimerFan(String hour, String minute) {
+    String ans = "";
+    if (hour.length == 1) ans += "0";
+    ans += hour;
+    if (minute.length == 1) ans += "0";
+    ans += minute;
+    getDataAPI.updateFanData(ans);
   }
 
   // fanSpeedControl(double valueChange) {
