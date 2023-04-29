@@ -1,5 +1,8 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:hsmarthome/bar_chart/resources/app_resources.dart';
 import 'package:hsmarthome/bar_chart/extensions/color_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -7,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/pages/app/dashboard_page/dashboard_device.dart';
-
+import 'package:firebase_database/firebase_database.dart';
 import '../../../modules/home_controller/home_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  const Dashboard({super.key});
 
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
@@ -32,11 +36,106 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
 
   bool isPlaying = false;
+
+  // DatabaseReference ref = FirebaseDatabase.instance.ref().child("thang");
+  // DatabaseReference ref = FirebaseDatabase.instance.ref();
+
+  Widget listItem() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
+      height: 5,
+      color: Colors.amberAccent,
+      child: const Text('Temp'),
+    );
+  }
+
+  // int sum = 0;
+
+  List day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  List device = ['Fan', 'Led'];
+
+  getSum() async {
+    // await FirebaseFirestore.instance
+    //     .collection("Fan")
+    //     .where('day', isEqualTo: 'Fri')
+    //     .get()
+    //     .then((querySnapshot) {
+    //   querySnapshot.docs.forEach((result) {
+    //     // print(result.get('time'));
+    //     sum += int.parse(result.get('time'));
+    //   });
+    //   print(sum);
+    // });
+    int count = 0;
+    for (var i in day) {
+      double sum = 0;
+      for (var j in device) {
+        double p = 0;
+        await FirebaseFirestore.instance
+            .collection(j)
+            .where('day', isEqualTo: i)
+            .get()
+            .then((querySnapshot) {
+          for (var result in querySnapshot.docs) {
+            sum += double.parse(result.get('time'));
+            p += double.parse(result.get('time'));
+          }
+          if (i == day[HomeController.currDay]) {
+            if (j == 'Led') {
+              HomeController.time_led[HomeController.currDay] = p;
+              double a = p / 3600;
+              double b = (p.toInt() % 3600) / 60;
+              double c = p.toInt() % 60;
+              int x = a.toInt();
+              int y = b.toInt();
+              int z = c.toInt();
+              String s = "";
+              if (x > 0) s += "${x}h";
+              if (y > 0) s += "${y}m";
+              s += "${z}s";
+              HomeController.time_led_curr = s;
+            } else {
+              HomeController.time_fan[HomeController.currDay] = p;
+              double a = p / 3600;
+              double b = (p.toInt() % 3600) / 60;
+              double c = p.toInt() % 60;
+              int x = a.toInt();
+              int y = b.toInt();
+              int z = c.toInt();
+              String s = "";
+              if (x > 0) s += x.toString() + "h";
+              if (y > 0) s += y.toString() + "m";
+              s += z.toString() + "s";
+              HomeController.time_fan_curr = s;
+            }
+          }
+        });
+      }
+
+      HomeController.energy_consume[count] = sum;
+      count++;
+    }
+    HomeController.max_val = max(
+        HomeController.time_led[HomeController.currDay],
+        HomeController.time_fan[HomeController.currDay]);
+    if (HomeController.max_val == 0) {
+      HomeController.max_val = 1;
+    }
+  }
+
+  @override
+  void initState() {
+    getSum();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -267,8 +366,10 @@ class DashboardState extends State<Dashboard> {
                                 OptionsMostUsed(
                                     iconPath: 'lib/images/light-bulb.png',
                                     nameDevice: 'Light',
-                                    percentage: 1,
-                                    time: '1h1m'),
+                                    percentage: HomeController
+                                            .time_led[HomeController.currDay] /
+                                        HomeController.max_val,
+                                    time: HomeController.time_led_curr),
                                 const Padding(
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 50.0),
@@ -277,37 +378,39 @@ class DashboardState extends State<Dashboard> {
                                     color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                 ),
-                                OptionsMostUsed(
-                                    iconPath: 'lib/images/gas-detector.png',
-                                    nameDevice: 'Gas Detector',
-                                    percentage: 0.7,
-                                    time: '1h1m'),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 50.0),
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Color.fromARGB(255, 204, 204, 204),
-                                  ),
-                                ),
-                                OptionsMostUsed(
-                                    iconPath: 'lib/images/door-camera.png',
-                                    nameDevice: 'Camera Door',
-                                    percentage: 0.5,
-                                    time: '1h1m'),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 50.0),
-                                  child: Divider(
-                                    thickness: 1,
-                                    color: Color.fromARGB(255, 204, 204, 204),
-                                  ),
-                                ),
+                                // OptionsMostUsed(
+                                //     iconPath: 'lib/images/gas-detector.png',
+                                //     nameDevice: 'Gas Detector',
+                                //     percentage: 0.7,
+                                //     time: '1h1m'),
+                                // const Padding(
+                                //   padding:
+                                //       EdgeInsets.symmetric(horizontal: 50.0),
+                                //   child: Divider(
+                                //     thickness: 1,
+                                //     color: Color.fromARGB(255, 204, 204, 204),
+                                //   ),
+                                // ),
+                                // OptionsMostUsed(
+                                //     iconPath: 'lib/images/door-camera.png',
+                                //     nameDevice: 'Camera Door',
+                                //     percentage: 0.5,
+                                //     time: '1h1m'),
+                                // const Padding(
+                                //   padding:
+                                //       EdgeInsets.symmetric(horizontal: 50.0),
+                                //   child: Divider(
+                                //     thickness: 1,
+                                //     color: Color.fromARGB(255, 204, 204, 204),
+                                //   ),
+                                // ),
                                 OptionsMostUsed(
                                     iconPath: 'lib/images/fan.png',
                                     nameDevice: 'Smart Fan',
-                                    percentage: 0.7,
-                                    time: '1h1m'),
+                                    percentage: HomeController
+                                            .time_fan[HomeController.currDay] /
+                                        HomeController.max_val,
+                                    time: HomeController.time_fan_curr),
                                 // const Padding(
                                 //   padding: EdgeInsets.symmetric(horizontal: 50.0),
                                 //   child: Divider(
@@ -326,13 +429,16 @@ class DashboardState extends State<Dashboard> {
               ),
             ),
             const SizedBox(height: 5),
+            // ElevatedButton(
+            //   onPressed: getSum,
+            //   child: const Text('Press'),
+            // ),
           ],
         ),
       ),
     );
   }
 
-// }
   BarChartGroupData makeGroupData(
     int x,
     double y, {
@@ -369,25 +475,25 @@ class DashboardState extends State<Dashboard> {
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, HomeController.energy[0],
+            return makeGroupData(0, HomeController.energy_consume[0],
                 isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, HomeController.energy[1],
+            return makeGroupData(1, HomeController.energy_consume[1],
                 isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, HomeController.energy[2],
+            return makeGroupData(2, HomeController.energy_consume[2],
                 isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, HomeController.energy[3],
+            return makeGroupData(3, HomeController.energy_consume[3],
                 isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, HomeController.energy[4],
+            return makeGroupData(4, HomeController.energy_consume[4],
                 isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, HomeController.energy[5],
+            return makeGroupData(5, HomeController.energy_consume[5],
                 isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, HomeController.energy[6],
+            return makeGroupData(6, HomeController.energy_consume[6],
                 isTouched: i == touchedIndex);
           default:
             return throw Error();

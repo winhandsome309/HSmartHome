@@ -18,8 +18,23 @@ class HomePage extends StatefulWidget {
   static bool autoFan = false;
   static bool timerLed = false;
   static bool timerFan = false;
-  static TimeOfDay timeOfDayLed = TimeOfDay(hour: 8, minute: 30);
-  static TimeOfDay timeOfDayFan = TimeOfDay(hour: 8, minute: 30);
+  static TimeOfDay timeOfDayLed = const TimeOfDay(hour: 8, minute: 30);
+  static TimeOfDay timeOfDayFan = const TimeOfDay(hour: 8, minute: 30);
+  static DateTime curr = DateTime.now();
+  static List month = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
   static void reset(int index) {
     if (index == 0) {
       autoLed = false;
@@ -117,12 +132,21 @@ class _HomePageState extends State<HomePage> {
                         password: passwordAccount.text,
                       );
                       // ignore: use_build_context_synchronously
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
                       // ignore: use_build_context_synchronously
                       setState(() {
                         HomeController.mySmartDevices[3][2] = true;
                         HomeController.countOpenDoor = 0;
                         HomeController.wrong5times = false;
+                        // Navigator.pop(context);
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => const Door()),
+                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Door()),
+                        );
                       });
                     } on FirebaseAuthException catch (e) {
                       // Navigator.pop(context);
@@ -255,6 +279,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   static double? gasPercent = 0.0;
+
   @override
   Widget build(BuildContext context) {
     // ignore: unrelated_type_equality_checks
@@ -424,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       Text(
-                        'Today 10 March, 2023',
+                        'Today ${HomePage.curr.day} ${HomePage.month[HomePage.curr.month - 1]}, ${HomePage.curr.year}',
                         style: GoogleFonts.lexendDeca(
                             color: const Color.fromRGBO(34, 73, 87, 1)),
                       ),

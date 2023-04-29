@@ -53,7 +53,18 @@ class HomeController extends GetxController {
   static double tempValue = 0.0;
   static String tempFan = "";
 
-  static List energy = [0.0, 0.0, 50.0, 10.0, 0.0, 0.0, 0.0];
+  static int currDay = 4;
+
+  // ignore: non_constant_identifier_names
+  static List energy_consume = [0.0, 0.0, 50.0, 10.0, 0.0, 0.0, 0.0];
+
+  static List time_led = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+  static String time_led_curr = "";
+
+  static List time_fan = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+  static String time_fan_curr = "";
+
+  static double max_val = 1.0;
 
   static String emailAccount = "abc";
 
@@ -72,8 +83,6 @@ class HomeController extends GetxController {
     ["Camera Door", "lib/images/door-camera.png", false],
     ["Add", "lib/images/add.png", false],
   ];
-
-  // static List<bool> isToggled = [false, false, false, false];
 
   onSwitched(int index) {
     if (index == 0) {
