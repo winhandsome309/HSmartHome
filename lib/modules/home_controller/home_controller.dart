@@ -53,10 +53,8 @@ class HomeController extends GetxController {
   static double tempValue = 0.0;
   static String tempFan = "";
 
-  static int currDay = 4;
-
   // ignore: non_constant_identifier_names
-  static List energy_consume = [0.0, 0.0, 50.0, 10.0, 0.0, 0.0, 0.0];
+  static List energy_consume = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
   static List time_led = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
   static String time_led_curr = "";
@@ -64,9 +62,18 @@ class HomeController extends GetxController {
   static List time_fan = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
   static String time_fan_curr = "";
 
-  static double max_val = 1.0;
+  static double max_val = 1000000000.0;
 
   static String emailAccount = "abc";
+
+  static double sum_energy_last_week = 1.0;
+
+  static double sum_energy = 0;
+  static double sum_energy_led = 0;
+  static double sum_energy_fan = 0;
+
+  static int energy_led = 3;
+  static int energy_fan = 5;
 
   static int countOpenDoor = 0;
 

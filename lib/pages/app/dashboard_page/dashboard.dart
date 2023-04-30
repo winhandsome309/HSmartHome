@@ -57,83 +57,128 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
-  // int sum = 0;
+  static DateTime curr = DateTime.now();
 
   List day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   List device = ['Fan', 'Led'];
 
-  getSum() async {
-    // await FirebaseFirestore.instance
-    //     .collection("Fan")
-    //     .where('day', isEqualTo: 'Fri')
-    //     .get()
-    //     .then((querySnapshot) {
-    //   querySnapshot.docs.forEach((result) {
-    //     // print(result.get('time'));
-    //     sum += int.parse(result.get('time'));
-    //   });
-    //   print(sum);
-    // });
-    int count = 0;
-    for (var i in day) {
-      double sum = 0;
+  getSumLastWeek() async {
+    // HomeController.sum_energy_last_week = 0;
+    double sum_energy_last_week = 0;
+    for (int i = 0; i < 7; i++) {
+      double sum_led = 0, sum_fan = 0;
       for (var j in device) {
         double p = 0;
+        int curr_day = 17 + i;
+        String k = curr_day.toString();
         await FirebaseFirestore.instance
             .collection(j)
-            .where('day', isEqualTo: i)
+            .where('date', isEqualTo: day[i])
+            .where('day', isEqualTo: k)
             .get()
-            .then((querySnapshot) {
-          for (var result in querySnapshot.docs) {
-            sum += double.parse(result.get('time'));
-            p += double.parse(result.get('time'));
-          }
-          if (i == day[HomeController.currDay]) {
-            if (j == 'Led') {
-              HomeController.time_led[HomeController.currDay] = p;
-              double a = p / 3600;
-              double b = (p.toInt() % 3600) / 60;
-              double c = p.toInt() % 60;
-              int x = a.toInt();
-              int y = b.toInt();
-              int z = c.toInt();
-              String s = "";
-              if (x > 0) s += "${x}h";
-              if (y > 0) s += "${y}m";
-              s += "${z}s";
-              HomeController.time_led_curr = s;
-            } else {
-              HomeController.time_fan[HomeController.currDay] = p;
-              double a = p / 3600;
-              double b = (p.toInt() % 3600) / 60;
-              double c = p.toInt() % 60;
-              int x = a.toInt();
-              int y = b.toInt();
-              int z = c.toInt();
-              String s = "";
-              if (x > 0) s += x.toString() + "h";
-              if (y > 0) s += y.toString() + "m";
-              s += z.toString() + "s";
-              HomeController.time_fan_curr = s;
+            .then(
+          (querySnapshot) {
+            for (var result in querySnapshot.docs) {
+              if (j == 'Led')
+                sum_led += result.get('time');
+              else
+                sum_fan += result.get('time');
+              p += result.get('time');
             }
-          }
-        });
+          },
+        );
       }
+      // HomeController.sum_energy_last_week +=
+      //     sum_led * HomeController.energy_led +
+      //         sum_fan * HomeController.energy_fan;
+      sum_energy_last_week += sum_led * HomeController.energy_led +
+          sum_fan * HomeController.energy_fan;
+    }
+    HomeController.sum_energy_last_week = sum_energy_last_week;
+  }
 
-      HomeController.energy_consume[count] = sum;
-      count++;
+  getSum() async {
+    // HomeController.sum_energy = 0;
+    // HomeController.sum_energy_led = 0;
+    // HomeController.sum_energy_fan = 0;
+    double sum_energy = 0;
+    double sum_energy_led = 0;
+    double sum_energy_fan = 0;
+    for (int i = curr.weekday - 1; i >= 0; i--) {
+      double sum_led = 0, sum_fan = 0;
+      for (var j in device) {
+        double p = 0;
+        int curr_day = curr.day - (curr.weekday - 1 - i);
+        String k = curr_day.toString();
+        await FirebaseFirestore.instance
+            .collection(j)
+            .where('date', isEqualTo: day[i])
+            .where('day', isEqualTo: k)
+            .get()
+            .then(
+          (querySnapshot) {
+            for (var result in querySnapshot.docs) {
+              if (j == 'Led')
+                sum_led += result.get('time');
+              else
+                sum_fan += result.get('time');
+              p += result.get('time');
+            }
+            if (i == curr.weekday - 1) {
+              if (j == 'Led') {
+                HomeController.time_led[curr.weekday - 1] = p;
+                double a = p / 3600;
+                double b = (p.toInt() % 3600) / 60;
+                double c = p.toInt() % 60;
+                int x = a.toInt();
+                int y = b.toInt();
+                int z = c.toInt();
+                String s = "";
+                if (x > 0) s += "${x}h";
+                if (y > 0) s += "${y}m";
+                s += "${z}s";
+                HomeController.time_led_curr = s;
+              } else {
+                HomeController.time_fan[curr.weekday - 1] = p;
+                double a = p / 3600;
+                double b = (p.toInt() % 3600) / 60;
+                double c = p.toInt() % 60;
+                int x = a.toInt();
+                int y = b.toInt();
+                int z = c.toInt();
+                String s = "";
+                if (x > 0) s += "${x}h";
+                if (y > 0) s += "${y}m";
+                s += "${z}s";
+                HomeController.time_fan_curr = s;
+              }
+            }
+          },
+        );
+      }
+      HomeController.energy_consume[i] = sum_led * HomeController.energy_led +
+          sum_fan * HomeController.energy_fan;
+      // HomeController.sum_energy += HomeController.energy_consume[i];
+      // HomeController.sum_energy_led += sum_led * HomeController.energy_led;
+      // HomeController.sum_energy_fan += sum_fan * HomeController.energy_fan;
+      sum_energy += HomeController.energy_consume[i];
+      sum_energy_led += sum_led * HomeController.energy_led;
+      sum_energy_fan += sum_fan * HomeController.energy_fan;
     }
-    HomeController.max_val = max(
-        HomeController.time_led[HomeController.currDay],
-        HomeController.time_fan[HomeController.currDay]);
+    HomeController.max_val = max(HomeController.time_led[curr.weekday - 1],
+        HomeController.time_fan[curr.weekday - 1]);
     if (HomeController.max_val == 0) {
-      HomeController.max_val = 1;
+      HomeController.max_val = 10000;
     }
+    HomeController.sum_energy = sum_energy;
+    HomeController.sum_energy_led = sum_energy_led;
+    HomeController.sum_energy_fan = sum_energy_fan;
   }
 
   @override
   void initState() {
     getSum();
+    getSumLastWeek();
     super.initState();
   }
 
@@ -196,7 +241,7 @@ class DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '\$320.09',
+                            '\$ ${(HomeController.sum_energy * 2000 / (23000 * 1000)).toStringAsFixed(2)}',
                             style: GoogleFonts.lexendDeca(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -214,13 +259,24 @@ class DashboardState extends State<Dashboard> {
                                   color: const Color.fromRGBO(34, 73, 87, 1),
                                 ),
                               ),
-                              Text(
-                                '-5.45%',
-                                style: GoogleFonts.lexendDeca(
-                                  fontSize: 16,
-                                  color: const Color.fromRGBO(9, 210, 138, 1),
-                                ),
-                              ),
+                              // Text(
+                              //   ((HomeController.sum_energy /
+                              //               HomeController
+                              //                   .sum_energy_last_week) >
+                              //           1.0)
+                              //       ? "+ ${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %"
+                              //       : "- ${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %",
+                              //   // '${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %',
+                              //   style: GoogleFonts.lexendDeca(
+                              //     fontSize: 16,
+                              //     color: ((HomeController.sum_energy /
+                              //                 HomeController
+                              //                     .sum_energy_last_week) >
+                              //             1.0)
+                              //         ? Colors.red
+                              //         : const Color.fromRGBO(9, 210, 138, 1),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -237,7 +293,7 @@ class DashboardState extends State<Dashboard> {
                         color: Colors.black,
                       ),
                     ),
-                    // ),
+
                     SizedBox(
                       height: 80,
                       width: 150,
@@ -245,7 +301,7 @@ class DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '220.88 kWh',
+                            '${HomeController.sum_energy / 1000} kWh',
                             style: GoogleFonts.lexendDeca(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -264,10 +320,21 @@ class DashboardState extends State<Dashboard> {
                                 ),
                               ),
                               Text(
-                                '-2.56%',
+                                ((HomeController.sum_energy /
+                                            HomeController
+                                                .sum_energy_last_week) >
+                                        1.0)
+                                    ? "+ ${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %"
+                                    : "- ${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %",
+                                // '${(HomeController.sum_energy / HomeController.sum_energy_last_week).toStringAsFixed(2)} %',
                                 style: GoogleFonts.lexendDeca(
                                   fontSize: 16,
-                                  color: const Color.fromRGBO(9, 210, 138, 1),
+                                  color: ((HomeController.sum_energy /
+                                              HomeController
+                                                  .sum_energy_last_week) >
+                                          1.0)
+                                      ? Colors.red
+                                      : const Color.fromRGBO(9, 210, 138, 1),
                                 ),
                               ),
                             ],
@@ -367,9 +434,11 @@ class DashboardState extends State<Dashboard> {
                                     iconPath: 'lib/images/light-bulb.png',
                                     nameDevice: 'Light',
                                     percentage: HomeController
-                                            .time_led[HomeController.currDay] /
+                                            .time_led[curr.weekday - 1] /
                                         HomeController.max_val,
-                                    time: HomeController.time_led_curr),
+                                    time: HomeController.time_led_curr,
+                                    info: "led-info",
+                                    info_hour: "Led"),
                                 const Padding(
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 50.0),
@@ -378,46 +447,24 @@ class DashboardState extends State<Dashboard> {
                                     color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                 ),
-                                // OptionsMostUsed(
-                                //     iconPath: 'lib/images/gas-detector.png',
-                                //     nameDevice: 'Gas Detector',
-                                //     percentage: 0.7,
-                                //     time: '1h1m'),
-                                // const Padding(
-                                //   padding:
-                                //       EdgeInsets.symmetric(horizontal: 50.0),
-                                //   child: Divider(
-                                //     thickness: 1,
-                                //     color: Color.fromARGB(255, 204, 204, 204),
-                                //   ),
-                                // ),
-                                // OptionsMostUsed(
-                                //     iconPath: 'lib/images/door-camera.png',
-                                //     nameDevice: 'Camera Door',
-                                //     percentage: 0.5,
-                                //     time: '1h1m'),
-                                // const Padding(
-                                //   padding:
-                                //       EdgeInsets.symmetric(horizontal: 50.0),
-                                //   child: Divider(
-                                //     thickness: 1,
-                                //     color: Color.fromARGB(255, 204, 204, 204),
-                                //   ),
-                                // ),
                                 OptionsMostUsed(
-                                    iconPath: 'lib/images/fan.png',
-                                    nameDevice: 'Smart Fan',
-                                    percentage: HomeController
-                                            .time_fan[HomeController.currDay] /
-                                        HomeController.max_val,
-                                    time: HomeController.time_fan_curr),
-                                // const Padding(
-                                //   padding: EdgeInsets.symmetric(horizontal: 50.0),
-                                //   child: Divider(
-                                //     thickness: 1,
-                                //     color: Color.fromARGB(255, 204, 204, 204),
-                                //   ),
-                                // ),
+                                  iconPath: 'lib/images/fan.png',
+                                  nameDevice: 'Fan',
+                                  percentage: HomeController
+                                          .time_fan[curr.weekday - 1] /
+                                      HomeController.max_val,
+                                  time: HomeController.time_fan_curr,
+                                  info: "fan-info",
+                                  info_hour: "Fan",
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 50.0),
+                                  child: Divider(
+                                    thickness: 1,
+                                    color: Color.fromARGB(255, 204, 204, 204),
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -503,7 +550,7 @@ class DashboardState extends State<Dashboard> {
   BarChartData mainBarData() {
     return BarChartData(
       // alignment: BarChartAlignment.center,
-      maxY: 500,
+      maxY: 300000,
       minY: 0,
       gridData: FlGridData(
         // show: true,
@@ -663,17 +710,22 @@ class DashboardState extends State<Dashboard> {
   }
 }
 
+// ignore: must_be_immutable
 class OptionsMostUsed extends StatefulWidget {
   String iconPath;
   String nameDevice;
   double percentage;
   String time;
+  String info;
+  String info_hour;
   OptionsMostUsed({
     super.key,
     required this.iconPath,
     required this.nameDevice,
     required this.percentage,
     required this.time,
+    required this.info,
+    required this.info_hour,
   });
 
   @override
@@ -747,7 +799,13 @@ class _OptionsMostUsedState extends State<OptionsMostUsed> {
           onTap: () => {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DashboardDevice()),
+              MaterialPageRoute(
+                builder: (context) => DashboardDevice(
+                  nameDevice: widget.nameDevice,
+                  info: widget.info,
+                  info_hour: widget.info_hour,
+                ),
+              ),
             ),
           },
         ),

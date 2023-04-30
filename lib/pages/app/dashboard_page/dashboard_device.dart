@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hsmarthome/bar_chart/resources/app_resources.dart';
 import 'package:hsmarthome/bar_chart/extensions/color_extensions.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -8,8 +9,17 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hsmarthome/pages/app/dashboard_page/dashboard.dart';
 
+import '../../../modules/home_controller/home_controller.dart';
+
 class DashboardDevice extends StatefulWidget {
-  DashboardDevice({super.key});
+  String nameDevice = "";
+  String info = "";
+  String info_hour = "";
+  DashboardDevice(
+      {super.key,
+      required this.nameDevice,
+      required this.info,
+      required this.info_hour});
 
   List<Color> get availableColors => const <Color>[
         AppColors.contentColorPurple,
@@ -69,9 +79,9 @@ class DashboardDeviceState extends State<DashboardDevice> {
                     },
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 120),
+                    padding: const EdgeInsets.only(right: 130),
                     child: Text(
-                      'Lamp',
+                      widget.nameDevice,
                       style: GoogleFonts.lexendDeca(
                         color: const Color.fromRGBO(34, 73, 87, 1),
                         fontSize: 20,
@@ -129,9 +139,76 @@ class DashboardDeviceState extends State<DashboardDevice> {
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 0),
-                                        child: BarChart(
-                                          mainBarData(),
-                                          swapAnimationDuration: animDuration,
+                                        child: FutureBuilder(
+                                          future: FirebaseFirestore.instance
+                                              .collection(widget.info_hour)
+                                              .get(),
+                                          builder: (context,
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snapshot) {
+                                            num sum = 0;
+                                            // List energy = [
+                                            //   0.0,
+                                            //   0.0,
+                                            //   0.0,
+                                            //   0.0,
+                                            //   0.0,
+                                            //   0.0,
+                                            //   0.0
+                                            // ];
+                                            List day = [
+                                              'Mon',
+                                              'Tue',
+                                              'Wed',
+                                              'Thu',
+                                              'Fri',
+                                              'Sat',
+                                              'Sun'
+                                            ];
+                                            List consume_energy = [
+                                              0.0,
+                                              0.0,
+                                              0.0,
+                                              0.0,
+                                              0.0,
+                                              0.0,
+                                              0.0
+                                            ];
+                                            DateTime curr = DateTime.now();
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.done) {
+                                              for (var i
+                                                  in snapshot.data!.docs) {
+                                                for (int j = curr.weekday - 1;
+                                                    j >= 0;
+                                                    j--) {
+                                                  int p = curr.day - j;
+                                                  // print('Thang');
+                                                  // print(p.toString());
+                                                  // print(i.get('day'));
+                                                  if (p.toString() ==
+                                                      i.get('day')) {
+                                                    int a = i.get('time');
+                                                    if (widget.info_hour ==
+                                                        'Led') {
+                                                      a *= HomeController
+                                                          .energy_led;
+                                                    } else {
+                                                      a *= HomeController
+                                                          .energy_fan;
+                                                    }
+                                                    consume_energy[j] += a;
+                                                    break;
+                                                  }
+                                                }
+                                              }
+                                            }
+                                            return BarChart(
+                                              mainBarData(consume_energy),
+                                              swapAnimationDuration:
+                                                  animDuration,
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),
@@ -178,16 +255,16 @@ class DashboardDeviceState extends State<DashboardDevice> {
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: const [
+                                        children: [
                                           Padding(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                               left: 10,
                                               top: 10,
                                               bottom: 7,
                                             ),
                                             child: Text(
-                                              'Light',
-                                              style: TextStyle(
+                                              widget.nameDevice,
+                                              style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w700,
                                               ),
@@ -206,9 +283,37 @@ class DashboardDeviceState extends State<DashboardDevice> {
                                     color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                 ),
-                                InfoDevice(
-                                  title: 'Total hours of use',
-                                  content: '10h15m',
+                                FutureBuilder(
+                                  future: FirebaseFirestore.instance
+                                      .collection(widget.info_hour)
+                                      .get(),
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    num sum = 0;
+                                    String s = "Waiting";
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      for (var i in snapshot.data!.docs) {
+                                        sum += i.get('time');
+                                      }
+                                      s = "";
+                                      int p = sum as int;
+                                      double a = p / 3600;
+                                      double b = (p.toInt() % 3600) / 60;
+                                      double c = p.toInt() % 60;
+                                      int x = a.toInt();
+                                      int y = b.toInt();
+                                      int z = c.toInt();
+                                      // String s = "";
+                                      if (x > 0) s += "${x}h";
+                                      if (y > 0) s += "${y}m";
+                                      s += "${z}s";
+                                    }
+                                    return InfoDevice(
+                                      title: 'Total hours of use',
+                                      content: s,
+                                    );
+                                  },
                                 ),
                                 const Padding(
                                   padding:
@@ -218,9 +323,19 @@ class DashboardDeviceState extends State<DashboardDevice> {
                                     color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                 ),
-                                InfoDevice(
-                                  title: 'Wattage',
-                                  content: '194W',
+                                FutureBuilder(
+                                  future: FirebaseFirestore.instance
+                                      .collection(widget.info)
+                                      .get(),
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    return InfoDevice(
+                                      title: 'Wattage',
+                                      content: snapshot.data?.docs[0]
+                                              .get('wattage') ??
+                                          "Waiting",
+                                    );
+                                  },
                                 ),
                                 const Padding(
                                   padding:
@@ -230,9 +345,19 @@ class DashboardDeviceState extends State<DashboardDevice> {
                                     color: Color.fromARGB(255, 204, 204, 204),
                                   ),
                                 ),
-                                InfoDevice(
-                                  title: 'Producer',
-                                  content: 'Handsome Production',
+                                FutureBuilder(
+                                  future: FirebaseFirestore.instance
+                                      .collection(widget.info)
+                                      .get(),
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    return InfoDevice(
+                                      title: 'Producer',
+                                      content: snapshot.data?.docs[0]
+                                              .get('producer') ??
+                                          "Waiting",
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -284,31 +409,31 @@ class DashboardDeviceState extends State<DashboardDevice> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups(List arr) => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 100, isTouched: i == touchedIndex);
+            return makeGroupData(0, arr[0], isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 120, isTouched: i == touchedIndex);
+            return makeGroupData(1, arr[1], isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 140, isTouched: i == touchedIndex);
+            return makeGroupData(2, arr[2], isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 150, isTouched: i == touchedIndex);
+            return makeGroupData(3, arr[3], isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 100, isTouched: i == touchedIndex);
+            return makeGroupData(4, arr[4], isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 300, isTouched: i == touchedIndex);
+            return makeGroupData(5, arr[5], isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 400, isTouched: i == touchedIndex);
+            return makeGroupData(6, arr[6], isTouched: i == touchedIndex);
           default:
             return throw Error();
         }
       });
 
-  BarChartData mainBarData() {
+  BarChartData mainBarData(List arr) {
     return BarChartData(
       // alignment: BarChartAlignment.center,
-      maxY: 500,
+      maxY: 200000,
       minY: 0,
       gridData: FlGridData(
         // show: true,
@@ -412,7 +537,7 @@ class DashboardDeviceState extends State<DashboardDevice> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(arr),
       // gridData: FlGridData(show: false),
     );
   }
@@ -471,6 +596,7 @@ class DashboardDeviceState extends State<DashboardDevice> {
 class InfoDevice extends StatefulWidget {
   String title;
   String content;
+
   InfoDevice({
     super.key,
     required this.title,
